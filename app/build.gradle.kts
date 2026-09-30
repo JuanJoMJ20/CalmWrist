@@ -21,3 +21,14 @@ android {
 
     defaultConfig {
         applicationId = "com.calmwrist.wear"
+        minSdk = 30
+        targetSdk = 37
+        versionCode = 1
+        versionName = "0.1.0"
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
