@@ -32,3 +32,20 @@ android {
         release {
             isMinifyEnabled = false
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+}
+
+dependencies {
+    implementation(platform("androidx.compose:compose-bom:2026.09.00"))
+
+    implementation("androidx.activity:activity-compose:1.13.0")
