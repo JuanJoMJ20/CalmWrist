@@ -15,3 +15,20 @@ val localProperties = Properties().apply {
 val geminiApiKey: String = localProperties.getProperty("geminiApiKey", "")
 
 android {
+    namespace = "com.calmwrist.wear"
+    compileSdk = 37
+    buildToolsVersion = "36.0.0"
+
+    defaultConfig {
+        applicationId = "com.calmwrist.wear"
+        minSdk = 30
+        targetSdk = 37
+        versionCode = 1
+        versionName = "0.1.0"
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
