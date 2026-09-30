@@ -55,3 +55,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
 
+    // Wear OS Compose (Material + Foundation), versionado independiente del BOM.
+    implementation("androidx.wear.compose:compose-material:1.7.1")
+    implementation("androidx.wear.compose:compose-foundation:1.7.1")
+
+    // Lectura de frecuencia cardíaca en tiempo real desde el propio reloj.
+    implementation("androidx.health:health-services-client:1.1.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.8.1")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
+}
