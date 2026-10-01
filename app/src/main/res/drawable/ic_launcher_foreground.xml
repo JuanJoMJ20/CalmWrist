@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Onda de respiración, igual al glifo del ícono que generó el
+         usuario con IA: un solo trazo fluido, contenido dentro de la
+         zona segura circular de 66dp que exige un adaptive icon. -->
+    <path
+        android:pathData="M20,62 C28,42 40,42 48,58 C56,74 68,74 76,56 C80,48 84,44 88,40"
+        android:strokeColor="#FAF8F3"
+        android:strokeWidth="13"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000" />
+</vector>
