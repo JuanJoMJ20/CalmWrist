@@ -11,3 +11,16 @@ enum class StressBand {
     ELEVATED,
     CRISIS,
 }
+
+/**
+ * La Voz de CalmWrist es siempre la misma (identidad estable y segura).
+ * El Tono es la variable que cambia con el contexto emocional del usuario.
+ */
+enum class ToneMode {
+    EMPATHETIC,
+    IMPERATIVE_CALMING,
+}
+
+data class ToneCopy(
+    val tone: ToneMode,
+    val title: String,
