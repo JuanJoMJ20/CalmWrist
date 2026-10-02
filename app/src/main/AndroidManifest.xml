@@ -22,3 +22,15 @@
             android:value="true" />
 
         <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.DeviceDefault">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Puente del panel de control web de la demo (adb shell am broadcast).
+             Inerte en builds de release: DebugCommandReceiver chequea BuildConfig.DEBUG. -->
+        <receiver
