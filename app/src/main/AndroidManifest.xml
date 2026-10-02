@@ -30,3 +30,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Puente del panel de control web de la demo (adb shell am broadcast).
+             Inerte en builds de release: DebugCommandReceiver chequea BuildConfig.DEBUG. -->
+        <receiver
+            android:name=".debug.DebugCommandReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.calmwrist.wear.debug.SET_BAND" />
+                <action android:name="com.calmwrist.wear.debug.CLEAR_DATA" />
+                <action android:name="com.calmwrist.wear.debug.DUMP_STATE" />
+                <action android:name="com.calmwrist.wear.debug.RUN_CAPSULE_TEST" />
+                <action android:name="com.calmwrist.wear.debug.RUN_LETTER_TEST" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
