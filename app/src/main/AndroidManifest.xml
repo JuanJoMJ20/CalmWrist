@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <!-- Lectura de pulso en segundo plano: núcleo de la detección proactiva. -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Para generar la cápsula de contención personalizada vía LLM. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
