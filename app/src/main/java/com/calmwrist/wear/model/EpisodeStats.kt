@@ -28,3 +28,18 @@ fun computeEpisodeStats(episodes: List<EpisodeRecord>): EpisodeStats? {
 
     val trend = if (episodes.size < 4) {
         Trend.NOT_ENOUGH_DATA
+    } else {
+        val sorted = episodes.sortedBy { it.timestampMillis }
+        val splitAt = sorted.size / 2
+        val olderAvg = sorted.take(splitAt).map { it.durationSeconds }.average()
+        val recentAvg = sorted.drop(splitAt).map { it.durationSeconds }.average()
+        val change = (recentAvg - olderAvg) / olderAvg
+        when {
+            change <= -0.15 -> Trend.IMPROVING
+            change >= 0.15 -> Trend.WORSENING
+            else -> Trend.STABLE
+        }
+    }
+
+    val bucketLabels = listOf("Madrugada", "Mañana", "Tarde", "Noche")
+    val calendar = Calendar.getInstance()
