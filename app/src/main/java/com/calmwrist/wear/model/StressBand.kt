@@ -24,3 +24,16 @@ enum class ToneMode {
 data class ToneCopy(
     val tone: ToneMode,
     val title: String,
+    val subtitle: String,
+    val actionLabel: String,
+)
+
+/**
+ * Las 3 partes son obligatorias a nivel de tipo: ningún error del sistema
+ * puede construirse sin decir qué pasó, por qué, y qué hacer ahora.
+ */
+data class HumanizedErrorContent(
+    val whatHappened: String,
+    val why: String,
+    val whatToDoNow: String,
+)
