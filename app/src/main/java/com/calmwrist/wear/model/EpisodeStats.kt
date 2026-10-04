@@ -22,3 +22,15 @@ data class EpisodeStats(
  * inventar una tendencia con dos puntos de datos.
  */
 fun computeEpisodeStats(episodes: List<EpisodeRecord>): EpisodeStats? {
+    if (episodes.isEmpty()) return null
+
+    val avg = episodes.map { it.durationSeconds }.average().toLong()
+
+    val trend = if (episodes.size < 4) {
+        Trend.NOT_ENOUGH_DATA
+    } else {
+        val sorted = episodes.sortedBy { it.timestampMillis }
+        val splitAt = sorted.size / 2
+        val olderAvg = sorted.take(splitAt).map { it.durationSeconds }.average()
+        val recentAvg = sorted.drop(splitAt).map { it.durationSeconds }.average()
+        val change = (recentAvg - olderAvg) / olderAvg
