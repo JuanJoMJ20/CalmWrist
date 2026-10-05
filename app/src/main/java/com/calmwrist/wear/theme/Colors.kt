@@ -20,3 +20,14 @@ object CalmWristColors {
     val danger = Color(0xFFFF6B57)
 
     private val accent = mapOf(
+        StressBand.CALM to Color(0xFF63E6CB),
+        StressBand.ELEVATED to Color(0xFFFFD166),
+        StressBand.CRISIS to Color(0xFFFFB020),
+    )
+
+    /** Tinte muy tenue del acento, usado solo para el resplandor de fondo. */
+    private val glowTint = mapOf(
+        StressBand.CALM to Color(0xFF123832),
+        StressBand.ELEVATED to Color(0xFF3A2E10),
+        StressBand.CRISIS to Color(0xFF3A2408),
+    )
