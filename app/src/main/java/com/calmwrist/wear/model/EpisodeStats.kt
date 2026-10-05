@@ -46,3 +46,16 @@ fun computeEpisodeStats(episodes: List<EpisodeRecord>): EpisodeStats? {
     val bucketCounts = IntArray(4)
     episodes.forEach { episode ->
         calendar.timeInMillis = episode.timestampMillis
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val bucketIndex = when (hour) {
+            in 0..5 -> 0
+            in 6..11 -> 1
+            in 12..17 -> 2
+            else -> 3
+        }
+        bucketCounts[bucketIndex]++
+    }
+    val buckets = bucketLabels.mapIndexed { i, label -> TimeBucket(label, bucketCounts[i]) }
+
+    return EpisodeStats(count = episodes.size, avgDurationSeconds = avg, trend = trend, buckets = buckets)
+}
