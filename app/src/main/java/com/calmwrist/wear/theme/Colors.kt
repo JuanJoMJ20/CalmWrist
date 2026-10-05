@@ -28,3 +28,18 @@ object CalmWristColors {
     /** Tinte muy tenue del acento, usado solo para el resplandor de fondo. */
     private val glowTint = mapOf(
         StressBand.CALM to Color(0xFF123832),
+        StressBand.ELEVATED to Color(0xFF3A2E10),
+        StressBand.CRISIS to Color(0xFF3A2408),
+    )
+
+    fun accentFor(band: StressBand): Color = accent.getValue(band)
+
+    /**
+     * Resplandor radial sutil detrás del contenido: le da profundidad a
+     * la pantalla sin sacrificar el contraste casi-negro que exige una
+     * crisis con visibilidad reducida (el centro sigue siendo oscuro).
+     */
+    fun backgroundGlowFor(band: StressBand): Brush = Brush.radialGradient(
+        colors = listOf(glowTint.getValue(band), background),
+    )
+}
