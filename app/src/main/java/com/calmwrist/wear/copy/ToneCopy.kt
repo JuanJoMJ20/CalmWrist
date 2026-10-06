@@ -37,3 +37,16 @@ fun toneCopyFor(band: StressBand, capsule: PersonalCapsule? = null): ToneCopy = 
     )
 }
 
+/**
+ * Se muestra una sola vez, un par de segundos, justo al volver de una
+ * crisis a calma — antes de caer al mensaje genérico de siempre, como si
+ * nada hubiera pasado. Texto fijo y curado a propósito (no generado por
+ * IA ni elegido al azar): el refuerzo positivo después de una crisis es
+ * un momento demasiado sensible para dejarlo a la improvisación.
+ */
+val postCrisisAffirmation = ToneCopy(
+    tone = ToneMode.EMPATHETIC,
+    title = "Ya estás bien",
+    subtitle = "Volviste a tu ritmo. Eso lo hiciste tú.",
+    actionLabel = "Respirar conmigo",
+)
