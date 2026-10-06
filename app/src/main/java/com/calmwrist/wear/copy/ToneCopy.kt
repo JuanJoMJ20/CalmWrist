@@ -15,3 +15,20 @@ import com.calmwrist.wear.model.ToneMode
  * reemplaza el texto genérico por el que la IA generó a partir de lo que
  * ella misma contó que la calma — la Voz sigue siendo la misma, pero el
  * contenido es suyo.
+ */
+fun toneCopyFor(band: StressBand, capsule: PersonalCapsule? = null): ToneCopy = when (band) {
+    StressBand.CALM -> ToneCopy(
+        tone = ToneMode.EMPATHETIC,
+        title = "Estoy contigo",
+        subtitle = "Tu ritmo está estable. Aquí estoy si me necesitas.",
+        actionLabel = "Respirar conmigo",
+    )
+    StressBand.ELEVATED -> ToneCopy(
+        tone = ToneMode.EMPATHETIC,
+        title = "Noto que tu cuerpo se activó",
+        subtitle = "Es solo una señal, no un peligro. Vamos a bajar el ritmo.",
+        actionLabel = "Empezar a respirar",
+    )
+    StressBand.CRISIS -> ToneCopy(
+        tone = ToneMode.IMPERATIVE_CALMING,
+        title = capsule?.title ?: "Mírame. Respira conmigo.",
