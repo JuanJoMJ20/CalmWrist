@@ -24,3 +24,16 @@ fun toneCopyFor(band: StressBand, capsule: PersonalCapsule? = null): ToneCopy = 
         actionLabel = "Respirar conmigo",
     )
     StressBand.ELEVATED -> ToneCopy(
+        tone = ToneMode.EMPATHETIC,
+        title = "Noto que tu cuerpo se activó",
+        subtitle = "Es solo una señal, no un peligro. Vamos a bajar el ritmo.",
+        actionLabel = "Empezar a respirar",
+    )
+    StressBand.CRISIS -> ToneCopy(
+        tone = ToneMode.IMPERATIVE_CALMING,
+        title = capsule?.title ?: "Mírame. Respira conmigo.",
+        subtitle = capsule?.subtitle ?: "Esto va a pasar. Sigue el círculo con tu respiración.",
+        actionLabel = "Ya estoy mejor",
+    )
+}
+
