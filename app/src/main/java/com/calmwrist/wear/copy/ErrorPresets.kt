@@ -9,3 +9,15 @@ object ErrorPresets {
         whatToDoNow = "Ajusta la correa a tu muñeca",
     )
 
+    val lowBattery = HumanizedErrorContent(
+        whatHappened = "Me voy a apagar pronto",
+        why = "Queda poca batería para seguir vigilando tu pulso",
+        whatToDoNow = "Cárgame en los próximos 15 minutos",
+    )
+
+    val hapticUnavailable = HumanizedErrorContent(
+        whatHappened = "No puedo vibrar ahora",
+        why = "El modo silencio del reloj está bloqueando la vibración",
+        whatToDoNow = "Desactiva el modo silencio para sentir la guía",
+    )
+
