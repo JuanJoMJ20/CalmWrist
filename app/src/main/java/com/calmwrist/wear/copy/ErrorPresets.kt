@@ -15,3 +15,12 @@ object ErrorPresets {
         whatToDoNow = "Cárgame en los próximos 15 minutos",
     )
 
+    val hapticUnavailable = HumanizedErrorContent(
+        whatHappened = "No puedo vibrar ahora",
+        why = "El modo silencio del reloj está bloqueando la vibración",
+        whatToDoNow = "Desactiva el modo silencio para sentir la guía",
+    )
+
+    val sensorPermissionDenied = HumanizedErrorContent(
+        whatHappened = "No puedo vigilar tu pulso",
+        why = "No me diste permiso para leer el sensor del reloj",
