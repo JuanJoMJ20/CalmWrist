@@ -10,3 +10,15 @@ package com.calmwrist.wear.biometrics
 class BaselineTracker(private val alpha: Double = 0.02) {
     private var baseline: Double? = null
 
+    fun update(bpm: Double, isCalm: Boolean): Double {
+        val current = baseline
+        if (current == null) {
+            baseline = bpm
+            return bpm
+        }
+        if (isCalm) {
+            baseline = current + alpha * (bpm - current)
+        }
+        return baseline!!
+    }
+}
