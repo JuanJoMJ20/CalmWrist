@@ -24,3 +24,12 @@ object ErrorPresets {
     val sensorPermissionDenied = HumanizedErrorContent(
         whatHappened = "No puedo vigilar tu pulso",
         why = "No me diste permiso para leer el sensor del reloj",
+        whatToDoNow = "Abre Ajustes y activa el permiso de sensores corporales",
+    )
+
+    val sensorUnsupported = HumanizedErrorContent(
+        whatHappened = "No puedo vigilar tu pulso de forma automática",
+        why = "Este reloj no tiene un sensor de pulso compatible",
+        whatToDoNow = "Usa el botón de respiración manual cuando lo necesites",
+    )
+}
