@@ -24,3 +24,16 @@ class BiometricStressService(context: Context) {
     private val measureClient: MeasureClient = HealthServices.getClient(context).measureClient
 
     suspend fun hasHeartRateCapability(): Boolean {
+        val capabilities = measureClient.getCapabilitiesAsync().await()
+        return DataType.HEART_RATE_BPM in capabilities.supportedDataTypesMeasure
+    }
+
+    fun heartRateFlow(): Flow<HeartRateReading> = callbackFlow {
+        val callback = object : MeasureCallback {
+            override fun onAvailabilityChanged(
+                dataType: DeltaDataType<*, *>,
+                availability: Availability,
+            ) {
+                // Disponibilidad informativa (ej. sensor calentando);
+                // no bloquea el flujo, solo afecta la fiabilidad del dato.
+            }
