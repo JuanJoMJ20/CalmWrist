@@ -14,3 +14,11 @@ class BaselineTracker(private val alpha: Double = 0.02) {
         val current = baseline
         if (current == null) {
             baseline = bpm
+            return bpm
+        }
+        if (isCalm) {
+            baseline = current + alpha * (bpm - current)
+        }
+        return baseline!!
+    }
+}
