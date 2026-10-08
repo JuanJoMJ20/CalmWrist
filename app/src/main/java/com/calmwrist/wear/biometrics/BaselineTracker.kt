@@ -6,3 +6,11 @@ package com.calmwrist.wear.biometrics
  * actualizándose durante una crisis real, terminaría "normalizando" un
  * pulso alto como si fuera la línea base, y la detección dejaría de
  * disparar justo cuando más importa.
+ */
+class BaselineTracker(private val alpha: Double = 0.02) {
+    private var baseline: Double? = null
+
+    fun update(bpm: Double, isCalm: Boolean): Double {
+        val current = baseline
+        if (current == null) {
+            baseline = bpm
