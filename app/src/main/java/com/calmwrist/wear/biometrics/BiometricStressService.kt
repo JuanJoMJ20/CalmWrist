@@ -29,3 +29,14 @@ class BiometricStressService(context: Context) {
     }
 
     fun heartRateFlow(): Flow<HeartRateReading> = callbackFlow {
+        val callback = object : MeasureCallback {
+            override fun onAvailabilityChanged(
+                dataType: DeltaDataType<*, *>,
+                availability: Availability,
+            ) {
+                // Disponibilidad informativa (ej. sensor calentando);
+                // no bloquea el flujo, solo afecta la fiabilidad del dato.
+            }
+
+            override fun onDataReceived(data: DataPointContainer) {
+                data.getData(DataType.HEART_RATE_BPM).forEach { point ->
