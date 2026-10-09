@@ -37,3 +37,17 @@ class BiometricStressService(context: Context) {
                 // Disponibilidad informativa (ej. sensor calentando);
                 // no bloquea el flujo, solo afecta la fiabilidad del dato.
             }
+
+            override fun onDataReceived(data: DataPointContainer) {
+                data.getData(DataType.HEART_RATE_BPM).forEach { point ->
+                    trySend(HeartRateReading(bpm = point.value))
+                }
+            }
+        }
+
+        measureClient.registerMeasureCallback(DataType.HEART_RATE_BPM, callback)
+        awaitClose {
+            measureClient.unregisterMeasureCallbackAsync(DataType.HEART_RATE_BPM, callback)
+        }
+    }
+}
