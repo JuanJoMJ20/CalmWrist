@@ -19,3 +19,13 @@ data class HeartRateReading(val bpm: Double)
  * Punto de integración con el sensor real del reloj vía Health Services.
  * Reemplaza al hook simulado del prototipo: en vez de un número generado
  * a mano, lee el pulso en segundo plano directamente del hardware.
+ */
+class BiometricStressService(context: Context) {
+    private val measureClient: MeasureClient = HealthServices.getClient(context).measureClient
+
+    suspend fun hasHeartRateCapability(): Boolean {
+        val capabilities = measureClient.getCapabilitiesAsync().await()
+        return DataType.HEART_RATE_BPM in capabilities.supportedDataTypesMeasure
+    }
+
+    fun heartRateFlow(): Flow<HeartRateReading> = callbackFlow {
