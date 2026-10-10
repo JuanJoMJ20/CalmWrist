@@ -17,3 +17,23 @@ class AiDebugStore(context: Context) {
         prefs.edit()
             .putString(KEY_CAPSULE_ANSWERS, JSONArray(answers).toString())
             .putString(KEY_CAPSULE_TITLE, title)
+            .putString(KEY_CAPSULE_SUBTITLE, subtitle)
+            .putString(KEY_CAPSULE_ERROR, error)
+            .putLong(KEY_CAPSULE_AT, System.currentTimeMillis())
+            .apply()
+    }
+
+    fun recordLetter(episodeCount: Int, text: String?, error: String?) {
+        prefs.edit()
+            .putInt(KEY_LETTER_EPISODES, episodeCount)
+            .putString(KEY_LETTER_TEXT, text)
+            .putString(KEY_LETTER_ERROR, error)
+            .putLong(KEY_LETTER_AT, System.currentTimeMillis())
+            .apply()
+    }
+
+    fun clear() {
+        prefs.edit().clear().apply()
+    }
+
+    fun toJson(): JSONObject = JSONObject().apply {
