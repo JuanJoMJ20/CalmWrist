@@ -28,3 +28,18 @@ class CapsuleStore(context: Context) {
         prefs.edit().putBoolean(KEY_DISMISSED, true).apply()
     }
 
+    fun isOnboardingPending(): Boolean =
+        load() == null && !prefs.getBoolean(KEY_DISMISSED, false)
+
+    /** Usado por el panel de control de demo para resetear el estado de la cápsula. */
+    fun clear() {
+        prefs.edit().clear().apply()
+    }
+
+    private companion object {
+        const val PREFS_NAME = "calmwrist_capsule"
+        const val KEY_TITLE = "capsule_title"
+        const val KEY_SUBTITLE = "capsule_subtitle"
+        const val KEY_DISMISSED = "onboarding_dismissed"
+    }
+}
