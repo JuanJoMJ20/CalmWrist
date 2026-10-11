@@ -29,3 +29,19 @@ class AiDebugStore(context: Context) {
             .putString(KEY_LETTER_TEXT, text)
             .putString(KEY_LETTER_ERROR, error)
             .putLong(KEY_LETTER_AT, System.currentTimeMillis())
+            .apply()
+    }
+
+    fun clear() {
+        prefs.edit().clear().apply()
+    }
+
+    fun toJson(): JSONObject = JSONObject().apply {
+        val capsuleAt = prefs.getLong(KEY_CAPSULE_AT, -1L)
+        if (capsuleAt != -1L) {
+            put(
+                "lastCapsule",
+                JSONObject().apply {
+                    put("answers", JSONArray(prefs.getString(KEY_CAPSULE_ANSWERS, "[]")))
+                    put("title", prefs.getString(KEY_CAPSULE_TITLE, null))
+                    put("subtitle", prefs.getString(KEY_CAPSULE_SUBTITLE, null))
