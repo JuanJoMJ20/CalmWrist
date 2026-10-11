@@ -20,3 +20,25 @@ private class RetryableServerException(message: String) : Exception(message)
  * sobrecarga del servidor (503) y la extracción del texto crudo de la
  * respuesta — cada caso de uso (cápsula, carta mensual) arma su propio
  * prompt y decide qué hacer con el texto devuelto.
+ *
+ * Si en el futuro [MODEL] deja de estar disponible, la propia API
+ * devuelve en el error 404 cuál es el modelo vigente recomendado.
+ *
+ * Usamos la variante "lite" (no la "flash" completa): para un JSON corto
+ * como este, el modelo completo activa razonamiento extendido interno y
+ * tarda demasiado — confirmado directamente contra la API, no es un
+ * problema de red ni del dispositivo. "lite" responde en segundos.
+ */
+object GeminiClient {
+    private const val MODEL = "gemini-flash-lite-latest"
+    private const val ENDPOINT =
+        "https://generativelanguage.googleapis.com/v1beta/models/$MODEL:generateContent"
+
+    init {
+        // Refuerza el "Connection: close" de abajo: desactiva el pool de
+        // conexiones keep-alive de HttpURLConnection a nivel de proceso,
+        // que es la causa raíz documentada de los "Socket closed" al azar.
+        System.setProperty("http.keepAlive", "false")
+    }
+    private const val TIMEOUT_MS = 30_000
+    private const val MAX_ATTEMPTS = 3
