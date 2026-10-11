@@ -13,3 +13,19 @@ import org.json.JSONObject
 class AiDebugStore(context: Context) {
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    fun recordCapsule(answers: List<String>, title: String?, subtitle: String?, error: String?) {
+        prefs.edit()
+            .putString(KEY_CAPSULE_ANSWERS, JSONArray(answers).toString())
+            .putString(KEY_CAPSULE_TITLE, title)
+            .putString(KEY_CAPSULE_SUBTITLE, subtitle)
+            .putString(KEY_CAPSULE_ERROR, error)
+            .putLong(KEY_CAPSULE_AT, System.currentTimeMillis())
+            .apply()
+    }
+
+    fun recordLetter(episodeCount: Int, text: String?, error: String?) {
+        prefs.edit()
+            .putInt(KEY_LETTER_EPISODES, episodeCount)
+            .putString(KEY_LETTER_TEXT, text)
+            .putString(KEY_LETTER_ERROR, error)
+            .putLong(KEY_LETTER_AT, System.currentTimeMillis())
