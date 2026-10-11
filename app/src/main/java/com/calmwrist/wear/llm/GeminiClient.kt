@@ -42,3 +42,26 @@ object GeminiClient {
     }
     private const val TIMEOUT_MS = 30_000
     private const val MAX_ATTEMPTS = 3
+    private val RETRY_DELAYS_MS = longArrayOf(2_000, 5_000)
+
+    suspend fun generateText(
+        prompt: String,
+        maxOutputTokens: Int,
+        jsonResponse: Boolean = false,
+    ): String = withContext(Dispatchers.IO) {
+        if (BuildConfig.GEMINI_API_KEY.isBlank() ||
+            BuildConfig.GEMINI_API_KEY == "PASTE_YOUR_KEY_HERE"
+        ) {
+            throw CapsuleGenerationException("Falta configurar la API key de Gemini")
+        }
+
+        var lastError: Exception? = null
+        for (attempt in 0 until MAX_ATTEMPTS) {
+            try {
+                return@withContext attemptRequest(prompt, maxOutputTokens, jsonResponse)
+            } catch (e: RetryableServerException) {
+                lastError = e
+                if (attempt < RETRY_DELAYS_MS.size) delay(RETRY_DELAYS_MS[attempt])
+            }
+        }
+        throw lastError ?: CapsuleGenerationException("Gemini no respondió tras varios intentos")
