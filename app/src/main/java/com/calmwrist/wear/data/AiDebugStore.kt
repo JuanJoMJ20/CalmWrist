@@ -57,3 +57,23 @@ class AiDebugStore(context: Context) {
                 JSONObject().apply {
                     put("episodeCount", prefs.getInt(KEY_LETTER_EPISODES, 0))
                     put("text", prefs.getString(KEY_LETTER_TEXT, null))
+                    put("error", prefs.getString(KEY_LETTER_ERROR, null))
+                    put("at", letterAt)
+                },
+            )
+        }
+    }
+
+    private companion object {
+        const val PREFS_NAME = "calmwrist_ai_debug"
+        const val KEY_CAPSULE_ANSWERS = "capsule_answers"
+        const val KEY_CAPSULE_TITLE = "capsule_title"
+        const val KEY_CAPSULE_SUBTITLE = "capsule_subtitle"
+        const val KEY_CAPSULE_ERROR = "capsule_error"
+        const val KEY_CAPSULE_AT = "capsule_at"
+        const val KEY_LETTER_EPISODES = "letter_episodes"
+        const val KEY_LETTER_TEXT = "letter_text"
+        const val KEY_LETTER_ERROR = "letter_error"
+        const val KEY_LETTER_AT = "letter_at"
+    }
+}
