@@ -27,3 +27,18 @@ class EpisodeHistoryStore(context: Context) {
         }
         prefs.edit().putString(KEY_EPISODES, json.toString()).apply()
     }
+
+    fun load(): List<EpisodeRecord> {
+        val raw = prefs.getString(KEY_EPISODES, null) ?: return emptyList()
+        val json = JSONArray(raw)
+        return (0 until json.length()).map { i ->
+            val obj = json.getJSONObject(i)
+            EpisodeRecord(timestampMillis = obj.getLong("t"), durationSeconds = obj.getLong("d"))
+        }
+    }
+
+    fun markLetterGenerated() {
+        prefs.edit().putLong(KEY_LAST_LETTER_AT, System.currentTimeMillis()).apply()
+    }
+
+    fun lastLetterGeneratedAt(): Long? {
