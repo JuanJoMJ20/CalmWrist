@@ -45,3 +45,19 @@ class AiDebugStore(context: Context) {
                     put("answers", JSONArray(prefs.getString(KEY_CAPSULE_ANSWERS, "[]")))
                     put("title", prefs.getString(KEY_CAPSULE_TITLE, null))
                     put("subtitle", prefs.getString(KEY_CAPSULE_SUBTITLE, null))
+                    put("error", prefs.getString(KEY_CAPSULE_ERROR, null))
+                    put("at", capsuleAt)
+                },
+            )
+        }
+        val letterAt = prefs.getLong(KEY_LETTER_AT, -1L)
+        if (letterAt != -1L) {
+            put(
+                "lastLetter",
+                JSONObject().apply {
+                    put("episodeCount", prefs.getInt(KEY_LETTER_EPISODES, 0))
+                    put("text", prefs.getString(KEY_LETTER_TEXT, null))
+                    put("error", prefs.getString(KEY_LETTER_ERROR, null))
+                    put("at", letterAt)
+                },
+            )
