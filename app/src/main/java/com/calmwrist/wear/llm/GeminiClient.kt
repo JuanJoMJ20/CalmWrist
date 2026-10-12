@@ -65,3 +65,25 @@ object GeminiClient {
             }
         }
         throw lastError ?: CapsuleGenerationException("Gemini no respondió tras varios intentos")
+    }
+
+    private fun attemptRequest(prompt: String, maxOutputTokens: Int, jsonResponse: Boolean): String {
+        val requestBody = JSONObject().apply {
+            put(
+                "contents",
+                JSONArray().put(
+                    JSONObject().apply {
+                        put("parts", JSONArray().put(JSONObject().apply { put("text", prompt) }))
+                    },
+                ),
+            )
+            put(
+                "generationConfig",
+                JSONObject().apply {
+                    if (jsonResponse) put("responseMimeType", "application/json")
+                    put("maxOutputTokens", maxOutputTokens)
+                },
+            )
+        }
+
+        val url = URL("$ENDPOINT?key=${BuildConfig.GEMINI_API_KEY}")
