@@ -87,3 +87,25 @@ object GeminiClient {
         }
 
         val url = URL("$ENDPOINT?key=${BuildConfig.GEMINI_API_KEY}")
+        val connection = (url.openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            setRequestProperty("content-type", "application/json")
+            // HttpURLConnection en Android reutiliza conexiones HTTP keep-alive
+            // de un pool interno, y hay un bug histórico conocido donde a veces
+            // reutiliza un socket que el servidor ya cerró del otro lado,
+            // provocando "Socket closed" / timeout en la lectura. Pedir que la
+            // conexión se cierre al terminar evita que caiga en ese pool.
+            setRequestProperty("Connection", "close")
+            doOutput = true
+            connectTimeout = TIMEOUT_MS
+            readTimeout = TIMEOUT_MS
+        }
+
+        try {
+            connection.outputStream.use { it.write(requestBody.toString().toByteArray(Charsets.UTF_8)) }
+
+            val status = connection.responseCode
+            val stream = if (status in 200..299) connection.inputStream else connection.errorStream
+            val responseText = stream.bufferedReader().use { it.readText() }
+
+            if (status == 503) {
