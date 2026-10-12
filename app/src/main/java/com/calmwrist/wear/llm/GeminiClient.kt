@@ -14,3 +14,20 @@ class CapsuleGenerationException(message: String) : Exception(message)
 /** Google dice explícitamente que un 503 es temporal: vale la pena reintentar. */
 private class RetryableServerException(message: String) : Exception(message)
 
+/**
+ * Cliente mínimo y compartido para el nivel gratuito de Gemini
+ * (aistudio.google.com). Centraliza la llamada HTTP, el reintento ante
+ * sobrecarga del servidor (503) y la extracción del texto crudo de la
+ * respuesta — cada caso de uso (cápsula, carta mensual) arma su propio
+ * prompt y decide qué hacer con el texto devuelto.
+ *
+ * Si en el futuro [MODEL] deja de estar disponible, la propia API
+ * devuelve en el error 404 cuál es el modelo vigente recomendado.
+ *
+ * Usamos la variante "lite" (no la "flash" completa): para un JSON corto
+ * como este, el modelo completo activa razonamiento extendido interno y
+ * tarda demasiado — confirmado directamente contra la API, no es un
+ * problema de red ni del dispositivo. "lite" responde en segundos.
+ */
+object GeminiClient {
+    private const val MODEL = "gemini-flash-lite-latest"
