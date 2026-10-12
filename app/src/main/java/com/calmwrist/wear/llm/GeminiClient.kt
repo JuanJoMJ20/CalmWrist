@@ -31,3 +31,20 @@ private class RetryableServerException(message: String) : Exception(message)
  */
 object GeminiClient {
     private const val MODEL = "gemini-flash-lite-latest"
+    private const val ENDPOINT =
+        "https://generativelanguage.googleapis.com/v1beta/models/$MODEL:generateContent"
+
+    init {
+        // Refuerza el "Connection: close" de abajo: desactiva el pool de
+        // conexiones keep-alive de HttpURLConnection a nivel de proceso,
+        // que es la causa raíz documentada de los "Socket closed" al azar.
+        System.setProperty("http.keepAlive", "false")
+    }
+    private const val TIMEOUT_MS = 30_000
+    private const val MAX_ATTEMPTS = 3
+    private val RETRY_DELAYS_MS = longArrayOf(2_000, 5_000)
+
+    suspend fun generateText(
+        prompt: String,
+        maxOutputTokens: Int,
+        jsonResponse: Boolean = false,
