@@ -109,3 +109,26 @@ object GeminiClient {
             val responseText = stream.bufferedReader().use { it.readText() }
 
             if (status == 503) {
+                throw RetryableServerException("Gemini respondió 503 (alta demanda): $responseText")
+            }
+            if (status !in 200..299) {
+                throw CapsuleGenerationException("Gemini respondió $status: $responseText")
+            }
+
+            return extractText(responseText)
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun extractText(responseText: String): String {
+        val json = JSONObject(responseText)
+        return json.getJSONArray("candidates")
+            .getJSONObject(0)
+            .getJSONObject("content")
+            .getJSONArray("parts")
+            .getJSONObject(0)
+            .getString("text")
+            .trim()
+    }
+}
