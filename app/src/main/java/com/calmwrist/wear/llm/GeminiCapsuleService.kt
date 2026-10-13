@@ -10,3 +10,16 @@ import org.json.JSONObject
  * para no depender de red justo cuando más importa responder rápido.
  */
 object GeminiCapsuleService {
+    suspend fun generateCapsule(answers: List<String>): PersonalCapsule {
+        val text = GeminiClient.generateText(
+            prompt = buildPrompt(answers),
+            maxOutputTokens = 200,
+            jsonResponse = true,
+        )
+        val json = JSONObject(text)
+        return PersonalCapsule(
+            title = json.getString("title").trim(),
+            subtitle = json.getString("subtitle").trim(),
+        )
+    }
+
