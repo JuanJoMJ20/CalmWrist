@@ -98,3 +98,20 @@ object GeminiClient {
             setRequestProperty("Connection", "close")
             doOutput = true
             connectTimeout = TIMEOUT_MS
+            readTimeout = TIMEOUT_MS
+        }
+
+        try {
+            connection.outputStream.use { it.write(requestBody.toString().toByteArray(Charsets.UTF_8)) }
+
+            val status = connection.responseCode
+            val stream = if (status in 200..299) connection.inputStream else connection.errorStream
+            val responseText = stream.bufferedReader().use { it.readText() }
+
+            if (status == 503) {
+                throw RetryableServerException("Gemini respondió 503 (alta demanda): $responseText")
+            }
+            if (status !in 200..299) {
+                throw CapsuleGenerationException("Gemini respondió $status: $responseText")
+            }
+
