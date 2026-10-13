@@ -115,3 +115,20 @@ object GeminiClient {
                 throw CapsuleGenerationException("Gemini respondió $status: $responseText")
             }
 
+            return extractText(responseText)
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun extractText(responseText: String): String {
+        val json = JSONObject(responseText)
+        return json.getJSONArray("candidates")
+            .getJSONObject(0)
+            .getJSONObject("content")
+            .getJSONArray("parts")
+            .getJSONObject(0)
+            .getString("text")
+            .trim()
+    }
+}
