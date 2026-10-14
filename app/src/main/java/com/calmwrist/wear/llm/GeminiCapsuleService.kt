@@ -36,3 +36,16 @@ object GeminiCapsuleService {
             Esta persona contó, en sus propias palabras:
             - Lugar que le da paz: "$place"
             - Persona o recuerdo que la calma: "$person"
+            - Frase que le gustaría escuchar en un mal momento: "$phrase"
+
+            Con ese material (no lo repitas literal, inspírate en él), escribe
+            un mensaje de contención para mostrar en su reloj durante una
+            crisis real. Tono imperativo-calmante: frases cortas, verbos en
+            imperativo suave, en español.
+
+            Devuelve SOLO un objeto JSON, sin texto alrededor, con este formato
+            exacto:
+            {"title": "frase corta e imperativa, máximo 6 palabras", "subtitle": "frase de apoyo, máximo 16 palabras"}
+        """.trimIndent()
+    }
+}
