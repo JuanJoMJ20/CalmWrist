@@ -21,3 +21,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Text
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+
+private enum class Phase(val label: String, val durationMs: Int, val hapticPattern: LongArray) {
+    INHALE("Inhala", 4000, longArrayOf(0, 120)),
+    HOLD("Sostén", 7000, longArrayOf(0, 60, 90, 60)),
+    EXHALE("Exhala", 8000, longArrayOf(0, 200)),
+}
+
+private fun nextPhase(current: Phase): Phase = when (current) {
+    Phase.INHALE -> Phase.HOLD
+    Phase.HOLD -> Phase.EXHALE
