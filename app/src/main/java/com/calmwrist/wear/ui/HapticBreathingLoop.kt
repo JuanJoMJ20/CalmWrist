@@ -90,3 +90,26 @@ fun HapticBreathingLoop(
         modifier = Modifier
             .size(GLOW_SIZE_DP.dp)
             .semantics {
+                liveRegion = LiveRegionMode.Assertive
+                contentDescription = "${phase.label}. Sigue el ritmo de la vibración."
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        // Resplandor: un degradado radial detrás del aro principal que se
+        // expande y contrae con la misma respiración, como si el círculo
+        // emitiera luz propia en vez de ser solo un trazo plano.
+        Box(
+            modifier = Modifier
+                .size(GLOW_SIZE_DP.dp)
+                .scale(scale.value)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(accent.copy(alpha = 0.22f), accent.copy(alpha = 0f)),
+                    ),
+                    shape = CircleShape,
+                ),
+        )
+
+        Box(
+            modifier = Modifier
+                .size(CIRCLE_SIZE_DP.dp)
