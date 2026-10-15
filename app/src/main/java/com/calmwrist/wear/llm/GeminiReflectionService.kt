@@ -25,3 +25,17 @@ object GeminiReflectionService {
     }
 
     private fun buildPrompt(episodes: List<EpisodeRecord>): String {
+        val hourFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val dayFormat = SimpleDateFormat("EEEE", Locale("es"))
+
+        val summary = episodes.joinToString("\n") { episode ->
+            val date = java.util.Date(episode.timestampMillis)
+            val minutes = TimeUnit.SECONDS.toMinutes(episode.durationSeconds)
+            val seconds = episode.durationSeconds % 60
+            "- ${dayFormat.format(date)} a las ${hourFormat.format(date)}, " +
+                "tardó ${minutes}m ${seconds}s en calmarse"
+        }
+
+        return """
+            Eres la voz de CalmWrist, un reloj que acompaña a alguien con
+            ansiedad. Tu personalidad es cálida, directa y segura — nunca
