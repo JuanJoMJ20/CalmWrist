@@ -113,3 +113,27 @@ fun HapticBreathingLoop(
         Box(
             modifier = Modifier
                 .size(CIRCLE_SIZE_DP.dp)
+                .scale(scale.value)
+                .background(accent.copy(alpha = 0.08f), CircleShape)
+                .border(width = 3.dp, color = accent, shape = CircleShape),
+        )
+
+        Text(
+            text = phase.label,
+            color = accent,
+            fontWeight = FontWeight.Bold,
+            fontSize = 17.sp,
+            letterSpacing = 0.4.sp,
+        )
+    }
+}
+
+private fun vibrate(context: Context, pattern: LongArray) {
+    val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val manager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        manager.defaultVibrator
+    } else {
+        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+    vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+}
