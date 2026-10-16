@@ -50,3 +50,20 @@ private fun nextPhase(current: Phase): Phase = when (current) {
 private const val CIRCLE_SIZE_DP = 104
 private const val GLOW_SIZE_DP = 146
 
+/**
+ * Técnica 4-7-8 (inhalar 4s / sostener 7s / exhalar 8s): el patrón más
+ * citado en manejo clínico de ansiedad aguda, porque la exhalación larga
+ * activa el sistema parasimpático. El patrón háptico distingue cada fase
+ * por NÚMERO de golpes, pensado para que se note incluso sin mirar.
+ */
+@Composable
+fun HapticBreathingLoop(
+    active: Boolean,
+    band: StressBand,
+    onCycleComplete: () -> Unit = {},
+) {
+    val context = LocalContext.current
+    val scale = remember { Animatable(0.55f) }
+    var phase by remember { mutableStateOf(Phase.INHALE) }
+
+    LaunchedEffect(active) {
