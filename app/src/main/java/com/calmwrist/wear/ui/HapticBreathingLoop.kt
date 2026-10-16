@@ -84,3 +84,21 @@ fun HapticBreathingLoop(
         targetValue = CalmWristColors.accentFor(band),
         animationSpec = tween(durationMillis = 900),
         label = "breathing-accent",
+    )
+
+    Box(
+        modifier = Modifier
+            .size(GLOW_SIZE_DP.dp)
+            .semantics {
+                liveRegion = LiveRegionMode.Assertive
+                contentDescription = "${phase.label}. Sigue el ritmo de la vibración."
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        // Resplandor: un degradado radial detrás del aro principal que se
+        // expande y contrae con la misma respiración, como si el círculo
+        // emitiera luz propia en vez de ser solo un trazo plano.
+        Box(
+            modifier = Modifier
+                .size(GLOW_SIZE_DP.dp)
+                .scale(scale.value)
