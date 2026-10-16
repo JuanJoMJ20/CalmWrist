@@ -102,3 +102,20 @@ fun HapticBreathingLoop(
             modifier = Modifier
                 .size(GLOW_SIZE_DP.dp)
                 .scale(scale.value)
+                .background(
+                    brush = Brush.radialGradient(
+                        colors = listOf(accent.copy(alpha = 0.22f), accent.copy(alpha = 0f)),
+                    ),
+                    shape = CircleShape,
+                ),
+        )
+
+        Box(
+            modifier = Modifier
+                .size(CIRCLE_SIZE_DP.dp)
+                .scale(scale.value)
+                .background(accent.copy(alpha = 0.08f), CircleShape)
+                .border(width = 3.dp, color = accent, shape = CircleShape),
+        )
+
+        Text(
