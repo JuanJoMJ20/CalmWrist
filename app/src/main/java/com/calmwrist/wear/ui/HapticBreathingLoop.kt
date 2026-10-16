@@ -67,3 +67,20 @@ fun HapticBreathingLoop(
     var phase by remember { mutableStateOf(Phase.INHALE) }
 
     LaunchedEffect(active) {
+        if (!active) return@LaunchedEffect
+        while (true) {
+            vibrate(context, phase.hapticPattern)
+            scale.animateTo(
+                targetValue = if (phase == Phase.EXHALE) 0.55f else 1f,
+                animationSpec = tween(durationMillis = phase.durationMs),
+            )
+            val next = nextPhase(phase)
+            phase = next
+            if (next == Phase.INHALE) onCycleComplete()
+        }
+    }
+
+    val accent by animateColorAsState(
+        targetValue = CalmWristColors.accentFor(band),
+        animationSpec = tween(durationMillis = 900),
+        label = "breathing-accent",
