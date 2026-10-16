@@ -32,3 +32,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+
+private enum class Phase(val label: String, val durationMs: Int, val hapticPattern: LongArray) {
+    INHALE("Inhala", 4000, longArrayOf(0, 120)),
+    HOLD("Sostén", 7000, longArrayOf(0, 60, 90, 60)),
+    EXHALE("Exhala", 8000, longArrayOf(0, 200)),
+}
+
+private fun nextPhase(current: Phase): Phase = when (current) {
+    Phase.INHALE -> Phase.HOLD
+    Phase.HOLD -> Phase.EXHALE
+    Phase.EXHALE -> Phase.INHALE
+}
+
+private const val CIRCLE_SIZE_DP = 104
+private const val GLOW_SIZE_DP = 146
+
