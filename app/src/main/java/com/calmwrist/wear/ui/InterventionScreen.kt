@@ -24,3 +24,29 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.Text
+import com.calmwrist.wear.copy.postCrisisAffirmation
+import com.calmwrist.wear.copy.toneCopyFor
+import com.calmwrist.wear.model.PersonalCapsule
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+
+/**
+ * Pantalla única, sin navegación: en una crisis no hay carga cognitiva
+ * disponible para recordar dónde está un botón en una jerarquía de menús.
+ * En CRISIS el ejercicio arranca solo (intervención proactiva); en
+ * CALM/ELEVATED el usuario lo activa con el único botón disponible.
+ */
+@Composable
+fun InterventionScreen(
+    band: StressBand,
+    onResolved: () -> Unit,
+    capsule: PersonalCapsule? = null,
+    justResolvedAffirmation: Boolean = false,
