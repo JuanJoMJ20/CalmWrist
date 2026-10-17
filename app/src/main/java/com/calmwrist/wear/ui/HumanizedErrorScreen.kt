@@ -39,3 +39,23 @@ fun HumanizedErrorScreen(
     actionLabel: String = "Entendido",
     onAction: () -> Unit,
 ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CalmWristColors.background)
+            .padding(top = 8.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+            .semantics { liveRegion = LiveRegionMode.Assertive },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(18.dp)
+                .background(CalmWristColors.danger.copy(alpha = 0.16f), CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = "!",
+                color = CalmWristColors.danger,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 11.sp,
