@@ -102,3 +102,29 @@ fun InterventionScreen(
         // título). En vez de esconderlo mientras se respira, se achica y
         // queda arriba del círculo: visible todo el tiempo, no unos
         // segundos nada más.
+        AnimatedContent(
+            targetState = copy.subtitle,
+            transitionSpec = { fadeIn(tween(500, delayMillis = 100)) togetherWith fadeOut(tween(150)) },
+            label = "subtitle",
+        ) { subtitle ->
+            Text(
+                text = subtitle,
+                color = CalmWristColors.textSecondary,
+                fontSize = if (showBreathing) 11.sp else 14.sp,
+                lineHeight = if (showBreathing) 13.sp else 18.sp,
+                maxLines = if (showBreathing) 2 else Int.MAX_VALUE,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+        }
+
+        if (showBreathing) {
+            HapticBreathingLoop(active = showBreathing, band = band)
+        }
+
+        // Si el usuario arrancó a respirar por su cuenta (no en crisis),
+        // necesita una forma de volver atrás — antes este botón solo podía
+        // ENCENDER la respiración, nunca apagarla, y la persona quedaba
+        // atrapada en la pantalla sin saber cómo salir.
+        val actionLabel = if (showBreathing && !isCrisis) "Listo, ya respiré" else copy.actionLabel
+
