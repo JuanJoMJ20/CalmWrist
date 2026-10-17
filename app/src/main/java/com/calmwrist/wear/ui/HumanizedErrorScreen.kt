@@ -59,3 +59,24 @@ fun HumanizedErrorScreen(
                 color = CalmWristColors.danger,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 11.sp,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(3.dp))
+
+        Text(
+            text = content.whatHappened,
+            color = CalmWristColors.textPrimary,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            lineHeight = 16.sp,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(3.dp))
+        Text(
+            text = content.why,
+            color = CalmWristColors.textSecondary,
+            fontSize = 11.sp,
+            lineHeight = 13.sp,
+            textAlign = TextAlign.Center,
+        )
