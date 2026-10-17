@@ -76,3 +76,29 @@ fun InterventionScreen(
             .padding(top = 30.dp, bottom = 34.dp, start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        AnimatedContent(
+            targetState = copy.title,
+            transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(200)) },
+            label = "title",
+        ) { title ->
+            Text(
+                text = title,
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp,
+                lineHeight = 24.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.semantics {
+                    heading()
+                    liveRegion = LiveRegionMode.Assertive
+                },
+            )
+        }
+
+        // Antes la respiración tapaba esto apenas arrancaba la crisis — y
+        // ahí vive la parte más personal de la cápsula (el lugar y la
+        // persona que la IA tejió en el texto, no solo la frase corta del
+        // título). En vez de esconderlo mientras se respira, se achica y
+        // queda arriba del círculo: visible todo el tiempo, no unos
+        // segundos nada más.
