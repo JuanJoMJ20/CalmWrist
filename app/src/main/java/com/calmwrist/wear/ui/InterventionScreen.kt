@@ -42,3 +42,26 @@ import com.calmwrist.wear.theme.CalmWristColors
  * Pantalla única, sin navegación: en una crisis no hay carga cognitiva
  * disponible para recordar dónde está un botón en una jerarquía de menús.
  * En CRISIS el ejercicio arranca solo (intervención proactiva); en
+ * CALM/ELEVATED el usuario lo activa con el único botón disponible.
+ */
+@Composable
+fun InterventionScreen(
+    band: StressBand,
+    onResolved: () -> Unit,
+    capsule: PersonalCapsule? = null,
+    justResolvedAffirmation: Boolean = false,
+    modifier: Modifier = Modifier.fillMaxSize(),
+) {
+    var breathingActive by remember { mutableStateOf(false) }
+    val copy = if (band == StressBand.CALM && justResolvedAffirmation) {
+        postCrisisAffirmation
+    } else {
+        toneCopyFor(band, capsule)
+    }
+    val isCrisis = band == StressBand.CRISIS
+    val showBreathing = breathingActive || isCrisis
+
+    // El acento y el resplandor de fondo transicionan suavemente en vez de
+    // saltar de golpe: el cambio de tono debe sentirse como una marea, no
+    // como un sobresalto — sobre todo si la banda sube hacia crisis.
+    val accent by animateColorAsState(
