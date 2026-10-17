@@ -100,3 +100,24 @@ fun HumanizedErrorScreen(
             )
         }
 
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Chip(
+            onClick = onAction,
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(
+                backgroundColor = CalmWristColors.surface,
+                contentColor = CalmWristColors.textPrimary,
+            ),
+            label = {
+                Text(
+                    text = actionLabel,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+    }
+}
