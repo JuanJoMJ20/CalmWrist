@@ -80,3 +80,23 @@ fun HumanizedErrorScreen(
             lineHeight = 13.sp,
             textAlign = TextAlign.Center,
         )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CalmWristColors.danger.copy(alpha = 0.10f), RoundedCornerShape(12.dp))
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = content.whatToDoNow,
+                color = CalmWristColors.danger,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 11.sp,
+                lineHeight = 13.sp,
+                textAlign = TextAlign.Center,
+            )
+        }
+
