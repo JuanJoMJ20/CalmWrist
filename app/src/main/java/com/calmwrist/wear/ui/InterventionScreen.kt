@@ -110,3 +110,25 @@ fun InterventionScreen(
             Text(
                 text = subtitle,
                 color = CalmWristColors.textSecondary,
+                fontSize = if (showBreathing) 11.sp else 14.sp,
+                lineHeight = if (showBreathing) 13.sp else 18.sp,
+                maxLines = if (showBreathing) 2 else Int.MAX_VALUE,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+        }
+
+        if (showBreathing) {
+            HapticBreathingLoop(active = showBreathing, band = band)
+        }
+
+        // Si el usuario arrancó a respirar por su cuenta (no en crisis),
+        // necesita una forma de volver atrás — antes este botón solo podía
+        // ENCENDER la respiración, nunca apagarla, y la persona quedaba
+        // atrapada en la pantalla sin saber cómo salir.
+        val actionLabel = if (showBreathing && !isCrisis) "Listo, ya respiré" else copy.actionLabel
+
+        Chip(
+            onClick = {
+                when {
+                    isCrisis -> onResolved()
