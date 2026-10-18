@@ -132,3 +132,26 @@ fun InterventionScreen(
             onClick = {
                 when {
                     isCrisis -> onResolved()
+                    showBreathing -> breathingActive = false
+                    else -> breathingActive = true
+                }
+            },
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(
+                backgroundColor = CalmWristColors.surface,
+                contentColor = accent,
+            ),
+            label = {
+                Text(
+                    text = actionLabel,
+                    color = accent,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp,
+                    letterSpacing = 0.3.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+    }
+}
