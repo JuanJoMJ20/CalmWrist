@@ -65,3 +65,25 @@ fun InterventionScreen(
     // saltar de golpe: el cambio de tono debe sentirse como una marea, no
     // como un sobresalto — sobre todo si la banda sube hacia crisis.
     val accent by animateColorAsState(
+        targetValue = CalmWristColors.accentFor(band),
+        animationSpec = tween(durationMillis = 900),
+        label = "accent",
+    )
+
+    Column(
+        modifier = modifier
+            .background(CalmWristColors.backgroundGlowFor(band))
+            .padding(top = 30.dp, bottom = 34.dp, start = 20.dp, end = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        AnimatedContent(
+            targetState = copy.title,
+            transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(200)) },
+            label = "title",
+        ) { title ->
+            Text(
+                text = title,
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp,
