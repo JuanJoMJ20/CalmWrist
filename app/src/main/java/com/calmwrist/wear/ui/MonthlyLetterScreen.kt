@@ -36,3 +36,22 @@ fun MonthlyLetterScreen(
     letterText: String?,
     onClose: () -> Unit,
 ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CalmWristColors.background)
+            .padding(top = 18.dp, bottom = 18.dp, start = 20.dp, end = 20.dp)
+            // La carta la escribe la IA: su largo varía, y en la pantalla
+            // redonda y chica del reloj un texto de más de 2-3 oraciones
+            // se corta sin esta línea, sin ninguna forma de bajar a leer
+            // el resto.
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(indicatorColor = CalmWristColors.accentFor(StressBand.CALM))
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Pensando en tu mes…",
+                color = CalmWristColors.textSecondary,
