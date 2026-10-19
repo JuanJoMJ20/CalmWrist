@@ -53,3 +53,31 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
     ) {
         Text(
             text = "Tu historial",
+            color = accent,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (stats == null) {
+            Text(
+                text = "Todavía no hay episodios registrados.",
+                color = CalmWristColors.textSecondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+            )
+        } else {
+            Text(
+                text = "${stats.count}",
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 30.sp,
+            )
+            Text(
+                text = if (stats.count == 1) "episodio registrado" else "episodios registrados",
+                color = CalmWristColors.textSecondary,
+                fontSize = 11.sp,
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Text(
