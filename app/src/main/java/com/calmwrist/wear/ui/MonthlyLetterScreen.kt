@@ -17,3 +17,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.Text
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+
+/**
+ * Carta reflexiva, no un dashboard: la lectura es lineal, sin números
+ * resaltados ni gráficos — el formato acompaña el tono cálido del texto
+ * que genera la IA, en vez de contradecirlo con una estética clínica.
+ */
+@Composable
+fun MonthlyLetterScreen(
+    isLoading: Boolean,
+    letterText: String?,
+    onClose: () -> Unit,
+) {
