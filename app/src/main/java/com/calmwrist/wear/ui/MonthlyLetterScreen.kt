@@ -55,3 +55,22 @@ fun MonthlyLetterScreen(
             Text(
                 text = "Pensando en tu mes…",
                 color = CalmWristColors.textSecondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+            )
+            return@Column
+        }
+
+        Text(
+            text = "Tu carta",
+            color = CalmWristColors.accentFor(StressBand.CALM),
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = letterText ?: "No pude escribir tu carta ahora. Prueba de nuevo más tarde.",
+            color = CalmWristColors.textPrimary,
+            fontSize = 12.sp,
+            lineHeight = 15.sp,
+            textAlign = TextAlign.Center,
