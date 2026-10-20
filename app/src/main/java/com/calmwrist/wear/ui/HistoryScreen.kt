@@ -136,3 +136,31 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth(bucket.count.toFloat() / maxCount)
+                                .background(accent.copy(alpha = if (bucket.count == 0) 0.15f else 0.8f), RoundedCornerShape(50)),
+                        )
+                    }
+                    Text(
+                        text = "${bucket.count}",
+                        color = CalmWristColors.textSecondary,
+                        fontSize = 10.sp,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+        }
+
+        Chip(
+            onClick = onClose,
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(backgroundColor = CalmWristColors.surface, contentColor = CalmWristColors.textPrimary),
+            label = {
+                Text(
+                    text = "Cerrar",
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+    }
+}
