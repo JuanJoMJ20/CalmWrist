@@ -81,3 +81,30 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
             Spacer(modifier = Modifier.height(14.dp))
 
             Text(
+                text = "Duración promedio",
+                color = CalmWristColors.textSecondary,
+                fontSize = 10.sp,
+            )
+            Text(
+                text = "${stats.avgDurationSeconds}s",
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+
+            val (trendText, trendColor) = when (stats.trend) {
+                Trend.IMPROVING -> "↓ Tus episodios se están acortando" to accent
+                Trend.WORSENING -> "↑ Tus episodios se están alargando" to CalmWristColors.danger
+                Trend.STABLE -> "→ Se mantiene estable" to CalmWristColors.textSecondary
+                Trend.NOT_ENOUGH_DATA -> "Necesitamos más episodios para ver una tendencia" to CalmWristColors.textSecondary
+            }
+            Text(
+                text = trendText,
+                color = trendColor,
+                fontSize = 11.sp,
+                lineHeight = 14.sp,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(18.dp))
+
