@@ -74,3 +74,23 @@ fun MonthlyLetterScreen(
             fontSize = 12.sp,
             lineHeight = 15.sp,
             textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Chip(
+            onClick = onClose,
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(
+                backgroundColor = CalmWristColors.surface,
+                contentColor = CalmWristColors.textPrimary,
+            ),
+            label = {
+                Text(
+                    text = "Cerrar",
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+    }
+}
