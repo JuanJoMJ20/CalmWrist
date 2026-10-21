@@ -160,3 +160,43 @@ fun OnboardingScreen(
                     lineHeight = 16.sp,
                     textAlign = TextAlign.Center,
                 )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Prueba en un reloj físico, o sigue con el mensaje general.",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 11.sp,
+                    lineHeight = 14.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Chip(
+                    onClick = onSkip,
+                    shape = RoundedCornerShape(50),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = CalmWristColors.surface,
+                        contentColor = CalmWristColors.textPrimary,
+                    ),
+                    label = {
+                        Text(
+                            text = "Entendido",
+                            textAlign = TextAlign.Center,
+                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    },
+                )
+            }
+
+            else -> {
+                Text(
+                    text = "${questionIndex + 1} / ${ONBOARDING_QUESTIONS.size}",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 11.sp,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = ONBOARDING_QUESTIONS[questionIndex],
+                    color = CalmWristColors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp,
