@@ -241,3 +241,43 @@ fun OnboardingScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = "Omitir por ahora",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 10.sp,
+                    modifier = Modifier.clickable { onSkip() },
+                )
+                if (com.calmwrist.wear.BuildConfig.DEBUG) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "dev: autocompletar",
+                        color = CalmWristColors.textSecondary.copy(alpha = 0.5f),
+                        fontSize = 9.sp,
+                        modifier = Modifier.clickable {
+                            val sample = listOf(
+                                "la playa al atardecer",
+                                "mi abuela",
+                                "esto ya pasó antes y vas a estar bien",
+                            )
+                            onComplete(sample)
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Primera pantalla que ve la persona antes de la entrevista por voz:
+ * explica qué va a pasar y por qué, y deja explícito que las respuestas
+ * se procesan con IA y que esto no reemplaza atención profesional —
+ * mejor decirlo acá, una sola vez y corto, que como un wall of text legal
+ * que nadie lee.
+ */
+@Composable
+private fun OnboardingWelcome(onStart: () -> Unit, onSkip: () -> Unit) {
+    val accent = CalmWristColors.accentFor(StressBand.CALM)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CalmWristColors.background)
