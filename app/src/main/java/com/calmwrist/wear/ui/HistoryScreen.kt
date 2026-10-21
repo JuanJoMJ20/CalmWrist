@@ -69,3 +69,26 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
         } else {
             Text(
                 text = "${stats.count}",
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 30.sp,
+            )
+            Text(
+                text = if (stats.count == 1) "episodio registrado" else "episodios registrados",
+                color = CalmWristColors.textSecondary,
+                fontSize = 11.sp,
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Text(
+                text = "Duración promedio",
+                color = CalmWristColors.textSecondary,
+                fontSize = 10.sp,
+            )
+            Text(
+                text = "${stats.avgDurationSeconds}s",
+                color = CalmWristColors.textPrimary,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+            Spacer(modifier = Modifier.height(14.dp))
