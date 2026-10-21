@@ -116,3 +116,27 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             val maxCount = (stats.buckets.maxOfOrNull { it.count } ?: 0).coerceAtLeast(1)
             stats.buckets.forEach { bucket ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = bucket.label,
+                        color = CalmWristColors.textSecondary,
+                        fontSize = 10.sp,
+                        modifier = Modifier.width(66.dp),
+                    )
+                    Box(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .fillMaxWidth()
+                            .padding(end = 24.dp),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(bucket.count.toFloat() / maxCount)
+                                .background(accent.copy(alpha = if (bucket.count == 0) 0.15f else 0.8f), RoundedCornerShape(50)),
+                        )
+                    }
+                    Text(
