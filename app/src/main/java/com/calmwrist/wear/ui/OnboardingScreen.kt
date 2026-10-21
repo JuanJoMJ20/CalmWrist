@@ -200,3 +200,44 @@ fun OnboardingScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp,
                     lineHeight = 18.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Chip(
+                    onClick = {
+                        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                            putExtra(
+                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+                            )
+                            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                            putExtra(RecognizerIntent.EXTRA_PROMPT, ONBOARDING_QUESTIONS[questionIndex])
+                        }
+                        try {
+                            voiceLauncher.launch(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            voiceUnavailable = true
+                        }
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = CalmWristColors.surface,
+                        contentColor = CalmWristColors.accentFor(StressBand.CALM),
+                    ),
+                    label = {
+                        Text(
+                            text = "Toca para hablar",
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    },
+                )
+                // El Chip tiene un área táctil mínima más alta que su
+                // forma visible (accesibilidad de Wear Compose): un
+                // espacio chico acá hacía que tocar "Omitir" en realidad
+                // tocara el Chip de arriba.
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Omitir por ahora",
