@@ -45,3 +45,27 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(CalmWristColors.background)
+            .padding(top = 26.dp, bottom = 26.dp, start = 24.dp, end = 24.dp)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+    ) {
+        Text(
+            text = "Tu historial",
+            color = accent,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (stats == null) {
+            Text(
+                text = "Todavía no hay episodios registrados.",
+                color = CalmWristColors.textSecondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+            )
+        } else {
+            Text(
+                text = "${stats.count}",
