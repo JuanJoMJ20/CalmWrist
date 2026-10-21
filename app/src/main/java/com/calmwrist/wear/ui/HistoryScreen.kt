@@ -140,3 +140,27 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
                         )
                     }
                     Text(
+                        text = "${bucket.count}",
+                        color = CalmWristColors.textSecondary,
+                        fontSize = 10.sp,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+        }
+
+        Chip(
+            onClick = onClose,
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(backgroundColor = CalmWristColors.surface, contentColor = CalmWristColors.textPrimary),
+            label = {
+                Text(
+                    text = "Cerrar",
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+    }
+}
