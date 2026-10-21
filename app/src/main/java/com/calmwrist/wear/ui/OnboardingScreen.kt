@@ -119,3 +119,44 @@ fun OnboardingScreen(
                 Text(
                     text = "No pude generar tu cápsula ahora",
                     color = CalmWristColors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    lineHeight = 17.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Revisá tu conexión. Mientras tanto uso el mensaje general.",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 11.sp,
+                    lineHeight = 14.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Chip(
+                    onClick = onSkip,
+                    shape = RoundedCornerShape(50),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = CalmWristColors.surface,
+                        contentColor = CalmWristColors.textPrimary,
+                    ),
+                    label = {
+                        Text(
+                            text = "Entendido",
+                            textAlign = TextAlign.Center,
+                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    },
+                )
+            }
+
+            voiceUnavailable -> {
+                Text(
+                    text = "Este reloj no tiene reconocimiento de voz",
+                    color = CalmWristColors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    lineHeight = 16.sp,
+                    textAlign = TextAlign.Center,
+                )
