@@ -71,3 +71,39 @@ fun OnboardingScreen(
 
     if (showWelcome) {
         OnboardingWelcome(onStart = { showWelcome = false }, onSkip = onSkip)
+        return
+    }
+
+    val voiceLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val spoken = result.data
+                ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                ?.firstOrNull()
+                .orEmpty()
+            if (spoken.isNotBlank()) {
+                answers.add(spoken)
+                if (questionIndex < ONBOARDING_QUESTIONS.lastIndex) {
+                    questionIndex++
+                } else {
+                    onComplete(answers.toList())
+                }
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CalmWristColors.background)
+            .padding(top = 16.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        when {
+            isGenerating -> {
+                CircularProgressIndicator(
+                    indicatorColor = CalmWristColors.accentFor(StressBand.CALM),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
