@@ -107,3 +107,40 @@ fun OnboardingScreen(
                     indicatorColor = CalmWristColors.accentFor(StressBand.CALM),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "Preparando tu cápsula…",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            generationFailed -> {
+                Text(
+                    text = "No pude generar tu cápsula ahora",
+                    color = CalmWristColors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    lineHeight = 17.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Revisá tu conexión. Mientras tanto uso el mensaje general.",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 11.sp,
+                    lineHeight = 14.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Chip(
+                    onClick = onSkip,
+                    shape = RoundedCornerShape(50),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = CalmWristColors.surface,
+                        contentColor = CalmWristColors.textPrimary,
+                    ),
+                    label = {
+                        Text(
+                            text = "Entendido",
+                            textAlign = TextAlign.Center,
