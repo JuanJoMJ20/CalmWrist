@@ -180,3 +180,40 @@ fun OnboardingScreen(
                         Text(
                             text = "Entendido",
                             textAlign = TextAlign.Center,
+                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    },
+                )
+            }
+
+            else -> {
+                Text(
+                    text = "${questionIndex + 1} / ${ONBOARDING_QUESTIONS.size}",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 11.sp,
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = ONBOARDING_QUESTIONS[questionIndex],
+                    color = CalmWristColors.textPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Chip(
+                    onClick = {
+                        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                            putExtra(
+                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+                            )
+                            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                            putExtra(RecognizerIntent.EXTRA_PROMPT, ONBOARDING_QUESTIONS[questionIndex])
+                        }
+                        try {
+                            voiceLauncher.launch(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            voiceUnavailable = true
