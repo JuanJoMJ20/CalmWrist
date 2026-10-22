@@ -34,3 +34,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.Text
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+import java.util.Locale
+
+private val ONBOARDING_QUESTIONS = listOf(
+    "¿Qué lugar te da paz?",
+    "¿Qué persona o recuerdo te calma?",
+    "¿Qué frase quieres escuchar en un mal momento?",
+)
+
+/**
+ * Entrevista corta por voz (nada de escribir en una pantalla de reloj):
+ * las respuestas se mandan una sola vez a la IA para armar la cápsula de
+ * contención personalizada. Se puede omitir — la app funciona igual con
+ * el texto genérico si la persona no quiere o no puede hacerla ahora.
+ */
+@Composable
+fun OnboardingScreen(
+    isGenerating: Boolean,
+    generationFailed: Boolean,
+    onComplete: (List<String>) -> Unit,
+    onSkip: () -> Unit,
+) {
+    var showWelcome by remember { mutableStateOf(true) }
+    var questionIndex by remember { mutableIntStateOf(0) }
+    val answers = remember { mutableStateListOf<String>() }
+    var voiceUnavailable by remember { mutableStateOf(false) }
+
+    if (showWelcome) {
+        OnboardingWelcome(onStart = { showWelcome = false }, onSkip = onSkip)
