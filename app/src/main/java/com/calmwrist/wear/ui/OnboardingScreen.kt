@@ -217,3 +217,39 @@ fun OnboardingScreen(
                             voiceLauncher.launch(intent)
                         } catch (e: ActivityNotFoundException) {
                             voiceUnavailable = true
+                        }
+                    },
+                    shape = RoundedCornerShape(50),
+                    colors = ChipDefaults.chipColors(
+                        backgroundColor = CalmWristColors.surface,
+                        contentColor = CalmWristColors.accentFor(StressBand.CALM),
+                    ),
+                    label = {
+                        Text(
+                            text = "Toca para hablar",
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    },
+                )
+                // El Chip tiene un área táctil mínima más alta que su
+                // forma visible (accesibilidad de Wear Compose): un
+                // espacio chico acá hacía que tocar "Omitir" en realidad
+                // tocara el Chip de arriba.
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Omitir por ahora",
+                    color = CalmWristColors.textSecondary,
+                    fontSize = 10.sp,
+                    modifier = Modifier.clickable { onSkip() },
+                )
+                if (com.calmwrist.wear.BuildConfig.DEBUG) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "dev: autocompletar",
+                        color = CalmWristColors.textSecondary.copy(alpha = 0.5f),
+                        fontSize = 9.sp,
+                        modifier = Modifier.clickable {
+                            val sample = listOf(
