@@ -322,3 +322,44 @@ private fun OnboardingWelcome(onStart: () -> Unit, onSkip: () -> Unit) {
             fontSize = 11.sp,
             lineHeight = 14.sp,
             textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Tres preguntas breves por voz para crear tu cápsula de contención personal.",
+            color = CalmWristColors.textSecondary,
+            fontSize = 11.sp,
+            lineHeight = 14.sp,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Tus respuestas se procesan con IA. CalmWrist no reemplaza atención profesional.",
+            color = CalmWristColors.textSecondary.copy(alpha = 0.7f),
+            fontSize = 10.sp,
+            lineHeight = 13.sp,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Chip(
+            onClick = onStart,
+            shape = RoundedCornerShape(50),
+            colors = ChipDefaults.chipColors(backgroundColor = accent, contentColor = CalmWristColors.background),
+            label = {
+                Text(
+                    text = "Comenzar",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Omitir por ahora",
+            color = accent,
+            fontSize = 11.sp,
+            modifier = Modifier.clickable { onSkip() },
+        )
+    }
+}
