@@ -253,3 +253,40 @@ fun OnboardingScreen(
                         fontSize = 9.sp,
                         modifier = Modifier.clickable {
                             val sample = listOf(
+                                "la playa al atardecer",
+                                "mi abuela",
+                                "esto ya pasó antes y vas a estar bien",
+                            )
+                            onComplete(sample)
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Primera pantalla que ve la persona antes de la entrevista por voz:
+ * explica qué va a pasar y por qué, y deja explícito que las respuestas
+ * se procesan con IA y que esto no reemplaza atención profesional —
+ * mejor decirlo acá, una sola vez y corto, que como un wall of text legal
+ * que nadie lee.
+ */
+@Composable
+private fun OnboardingWelcome(onStart: () -> Unit, onSkip: () -> Unit) {
+    val accent = CalmWristColors.accentFor(StressBand.CALM)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CalmWristColors.background)
+            .padding(top = 28.dp, bottom = 28.dp, start = 26.dp, end = 26.dp)
+            // Deslizable en vez de recortado: el contenido completo (ícono +
+            // textos + botones) no entra cómodo en una pantalla redonda de
+            // 1.2", así que en vez de apretarlo todo dejamos que se pueda
+            // bajar. Importante: con scroll, la Column necesita
+            // Arrangement.Top (no Center) — Center + verticalScroll rompe
+            // el layout (ver commit anterior, dejaba todo en blanco).
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
