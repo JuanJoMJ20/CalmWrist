@@ -290,3 +290,39 @@ private fun OnboardingWelcome(onStart: () -> Unit, onSkip: () -> Unit) {
             // el layout (ver commit anterior, dejaba todo en blanco).
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(72.dp)) {
+            Box(
+                modifier = Modifier
+                    .size(72.dp)
+                    .background(
+                        Brush.radialGradient(colors = listOf(accent.copy(alpha = 0.35f), Color.Transparent)),
+                    ),
+            )
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(CalmWristColors.background, CircleShape)
+                    .border(2.dp, accent, CircleShape),
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "CalmWrist",
+            color = CalmWristColors.textPrimary,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 19.sp,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Intervención proactiva en crisis de ansiedad",
+            color = accent,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 11.sp,
+            lineHeight = 14.sp,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Tres preguntas breves por voz para crear tu cápsula de contención personal.",
