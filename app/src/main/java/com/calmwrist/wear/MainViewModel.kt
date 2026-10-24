@@ -31,3 +31,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val capsuleStore = CapsuleStore(application)
     private val episodeHistoryStore = EpisodeHistoryStore(application)
     private val aiDebugStore = AiDebugStore(application)
+
+    init {
+        // Permite que el panel de control de la demo (vía adb broadcast)
+        // dispare acciones sobre esta instancia viva del ViewModel.
+        DebugBridge.attach(this)
+    }
+
+    private val _band = MutableStateFlow(StressBand.CALM)
+    val band: StateFlow<StressBand> = _band.asStateFlow()
+
+    private val _error = MutableStateFlow<HumanizedErrorContent?>(null)
+    val error: StateFlow<HumanizedErrorContent?> = _error.asStateFlow()
+
+    private val _capsule = MutableStateFlow(capsuleStore.load())
+    val capsule: StateFlow<PersonalCapsule?> = _capsule.asStateFlow()
+
+    private val _onboardingPending = MutableStateFlow(capsuleStore.isOnboardingPending())
+    val onboardingPending: StateFlow<Boolean> = _onboardingPending.asStateFlow()
+
+    private val _isGeneratingCapsule = MutableStateFlow(false)
+    val isGeneratingCapsule: StateFlow<Boolean> = _isGeneratingCapsule.asStateFlow()
+
+    private val _capsuleGenerationFailed = MutableStateFlow(false)
+    val capsuleGenerationFailed: StateFlow<Boolean> = _capsuleGenerationFailed.asStateFlow()
+
+    private val _hasEpisodeHistory = MutableStateFlow(episodeHistoryStore.load().isNotEmpty())
+    val hasEpisodeHistory: StateFlow<Boolean> = _hasEpisodeHistory.asStateFlow()
+
+    private val _showMonthlyLetter = MutableStateFlow(false)
+    val showMonthlyLetter: StateFlow<Boolean> = _showMonthlyLetter.asStateFlow()
+
+    private val _showHistory = MutableStateFlow(false)
+    val showHistory: StateFlow<Boolean> = _showHistory.asStateFlow()
