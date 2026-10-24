@@ -64,3 +64,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _showHistory = MutableStateFlow(false)
     val showHistory: StateFlow<Boolean> = _showHistory.asStateFlow()
+
+    private val _justResolvedAffirmation = MutableStateFlow(false)
+    val justResolvedAffirmation: StateFlow<Boolean> = _justResolvedAffirmation.asStateFlow()
+
+    private val _episodes = MutableStateFlow(episodeHistoryStore.load())
+    val episodes: StateFlow<List<EpisodeRecord>> = _episodes.asStateFlow()
+
+    private val _isGeneratingLetter = MutableStateFlow(false)
+    val isGeneratingLetter: StateFlow<Boolean> = _isGeneratingLetter.asStateFlow()
+
+    private val _letterText = MutableStateFlow<String?>(null)
+    val letterText: StateFlow<String?> = _letterText.asStateFlow()
+
+    /** Anulación manual para probar en el emulador, que no siempre simula HR real. */
+    private var debugOverrideActive = false
+    private var crisisStartedAtMillis: Long? = null
+
+    private var started = false
+
+    fun start() {
+        if (started) return
+        started = true
+
+        val service = BiometricStressService(getApplication())
+        viewModelScope.launch {
+            if (!service.hasHeartRateCapability()) {
+                _error.value = ErrorPresets.sensorUnsupported
+                return@launch
+            }
+            service.heartRateFlow().collect { reading ->
+                if (debugOverrideActive) return@collect
+                val isCalm = _band.value == StressBand.CALM
+                val currentBaseline = baseline.update(reading.bpm, isCalm)
