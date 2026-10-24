@@ -77,3 +77,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _letterText = MutableStateFlow<String?>(null)
     val letterText: StateFlow<String?> = _letterText.asStateFlow()
 
+    /** Anulación manual para probar en el emulador, que no siempre simula HR real. */
+    private var debugOverrideActive = false
+    private var crisisStartedAtMillis: Long? = null
+
+    private var started = false
+
+    fun start() {
+        if (started) return
+        started = true
+
+        val service = BiometricStressService(getApplication())
+        viewModelScope.launch {
+            if (!service.hasHeartRateCapability()) {
+                _error.value = ErrorPresets.sensorUnsupported
+                return@launch
+            }
+            service.heartRateFlow().collect { reading ->
+                if (debugOverrideActive) return@collect
+                val isCalm = _band.value == StressBand.CALM
+                val currentBaseline = baseline.update(reading.bpm, isCalm)
+                val delta = reading.bpm - currentBaseline
+                setBand(StressDetector.bandFor(delta))
+            }
+        }
+    }
+
+    private fun setBand(newBand: StressBand) {
