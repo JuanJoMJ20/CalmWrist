@@ -24,3 +24,30 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONObject
+
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val baseline = BaselineTracker()
+    private val capsuleStore = CapsuleStore(application)
+    private val episodeHistoryStore = EpisodeHistoryStore(application)
+    private val aiDebugStore = AiDebugStore(application)
+
+    init {
+        // Permite que el panel de control de la demo (vía adb broadcast)
+        // dispare acciones sobre esta instancia viva del ViewModel.
+        DebugBridge.attach(this)
+    }
+
+    private val _band = MutableStateFlow(StressBand.CALM)
+    val band: StateFlow<StressBand> = _band.asStateFlow()
+
+    private val _error = MutableStateFlow<HumanizedErrorContent?>(null)
+    val error: StateFlow<HumanizedErrorContent?> = _error.asStateFlow()
+
+    private val _capsule = MutableStateFlow(capsuleStore.load())
+    val capsule: StateFlow<PersonalCapsule?> = _capsule.asStateFlow()
+
+    private val _onboardingPending = MutableStateFlow(capsuleStore.isOnboardingPending())
+    val onboardingPending: StateFlow<Boolean> = _onboardingPending.asStateFlow()
+
+    private val _isGeneratingCapsule = MutableStateFlow(false)
