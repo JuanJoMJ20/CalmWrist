@@ -131,3 +131,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _capsuleGenerationFailed.value = true
                 aiDebugStore.recordCapsule(answers, title = null, subtitle = null, error = e.message ?: e.toString())
             } finally {
+                _isGeneratingCapsule.value = false
+            }
+        }
+    }
+
+    fun dismissOnboarding() {
+        capsuleStore.markOnboardingDismissed()
+        _onboardingPending.value = false
+        _capsuleGenerationFailed.value = false
+    }
+
+    fun setDebugBand(band: StressBand) {
+        debugOverrideActive = true
+        setBand(band)
+    }
+
+    fun dismissError() {
+        _error.value = null
+    }
+
+    fun resolveCrisis() {
+        val startedAt = crisisStartedAtMillis
+        if (startedAt != null) {
+            val durationSeconds = (System.currentTimeMillis() - startedAt) / 1000
+            episodeHistoryStore.append(EpisodeRecord(timestampMillis = startedAt, durationSeconds = durationSeconds))
+            _hasEpisodeHistory.value = true
+            _episodes.value = episodeHistoryStore.load()
+            crisisStartedAtMillis = null
+        }
+        _band.value = StressBand.CALM
+
+        // Un refuerzo positivo fijo, visible unos segundos, antes de caer
+        // al mensaje genérico de calma de siempre — ver postCrisisAffirmation.
