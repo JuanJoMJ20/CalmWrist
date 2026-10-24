@@ -104,3 +104,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun setBand(newBand: StressBand) {
+        if (newBand == StressBand.CRISIS && _band.value != StressBand.CRISIS) {
+            crisisStartedAtMillis = System.currentTimeMillis()
+            _justResolvedAffirmation.value = false
+        }
+        _band.value = newBand
+    }
+
+    /**
+     * Única llamada a la IA generativa de todo el flujo: corre en el
+     * onboarding, no en una crisis real. Si falla (sin red, error de API),
+     * se cae al texto genérico y la app sigue funcionando igual.
+     */
+    fun generateCapsule(answers: List<String>) {
+        viewModelScope.launch {
+            _isGeneratingCapsule.value = true
+            _capsuleGenerationFailed.value = false
+            try {
+                val generated = GeminiCapsuleService.generateCapsule(answers)
+                capsuleStore.save(generated)
+                _capsule.value = generated
+                _onboardingPending.value = false
+                aiDebugStore.recordCapsule(answers, generated.title, generated.subtitle, error = null)
+            } catch (e: Exception) {
+                Log.e("CalmWrist", "Fallo al generar la cápsula con Gemini", e)
+                _capsuleGenerationFailed.value = true
+                aiDebugStore.recordCapsule(answers, title = null, subtitle = null, error = e.message ?: e.toString())
+            } finally {
