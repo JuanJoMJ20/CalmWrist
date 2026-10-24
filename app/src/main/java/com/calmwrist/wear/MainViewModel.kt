@@ -51,3 +51,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val onboardingPending: StateFlow<Boolean> = _onboardingPending.asStateFlow()
 
     private val _isGeneratingCapsule = MutableStateFlow(false)
+    val isGeneratingCapsule: StateFlow<Boolean> = _isGeneratingCapsule.asStateFlow()
+
+    private val _capsuleGenerationFailed = MutableStateFlow(false)
+    val capsuleGenerationFailed: StateFlow<Boolean> = _capsuleGenerationFailed.asStateFlow()
+
+    private val _hasEpisodeHistory = MutableStateFlow(episodeHistoryStore.load().isNotEmpty())
+    val hasEpisodeHistory: StateFlow<Boolean> = _hasEpisodeHistory.asStateFlow()
+
+    private val _showMonthlyLetter = MutableStateFlow(false)
+    val showMonthlyLetter: StateFlow<Boolean> = _showMonthlyLetter.asStateFlow()
+
+    private val _showHistory = MutableStateFlow(false)
+    val showHistory: StateFlow<Boolean> = _showHistory.asStateFlow()
+
+    private val _justResolvedAffirmation = MutableStateFlow(false)
+    val justResolvedAffirmation: StateFlow<Boolean> = _justResolvedAffirmation.asStateFlow()
+
+    private val _episodes = MutableStateFlow(episodeHistoryStore.load())
+    val episodes: StateFlow<List<EpisodeRecord>> = _episodes.asStateFlow()
+
+    private val _isGeneratingLetter = MutableStateFlow(false)
+    val isGeneratingLetter: StateFlow<Boolean> = _isGeneratingLetter.asStateFlow()
+
+    private val _letterText = MutableStateFlow<String?>(null)
+    val letterText: StateFlow<String?> = _letterText.asStateFlow()
+
