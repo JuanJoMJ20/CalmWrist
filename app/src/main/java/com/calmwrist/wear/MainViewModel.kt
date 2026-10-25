@@ -230,3 +230,37 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.i("CalmWristDebug", "STATE:$state")
     }
 
+    fun debugSetBand(bandName: String) {
+        val band = StressBand.entries.firstOrNull { it.name == bandName } ?: return
+        setDebugBand(band)
+    }
+
+    /** Dispara una generación de cápsula real contra Gemini con respuestas de prueba. */
+    fun debugRunCapsuleTest(answers: List<String>) {
+        generateCapsule(answers)
+    }
+
+    /** Dispara una generación de carta mensual real contra Gemini. */
+    fun debugRunLetterTest() {
+        openMonthlyLetter()
+    }
+
+    /** Reset total: cápsula, historial de episodios, estado de IA y la banda actual. */
+    fun debugClearAll() {
+        capsuleStore.clear()
+        episodeHistoryStore.clear()
+        aiDebugStore.clear()
+        debugOverrideActive = false
+        crisisStartedAtMillis = null
+        _capsule.value = null
+        _onboardingPending.value = true
+        _capsuleGenerationFailed.value = false
+        _hasEpisodeHistory.value = false
+        _showMonthlyLetter.value = false
+        _letterText.value = null
+        _showHistory.value = false
+        _episodes.value = emptyList()
+        _justResolvedAffirmation.value = false
+        _band.value = StressBand.CALM
+    }
+}
