@@ -210,3 +210,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /** Vuelca el estado completo a logcat (tag CalmWristDebug) para que el panel lo lea. */
     fun debugDumpState() {
         val state = JSONObject().apply {
+            put("band", _band.value.name)
+            put("onboardingPending", _onboardingPending.value)
+            put("capsuleTitle", _capsule.value?.title)
+            put("capsuleSubtitle", _capsule.value?.subtitle)
+            val episodes = episodeHistoryStore.load()
+            put("episodeCount", episodes.size)
+            put(
+                "episodes",
+                JSONArray().apply {
+                    episodes.forEach { e ->
+                        put(JSONObject().apply { put("t", e.timestampMillis); put("d", e.durationSeconds) })
+                    }
+                },
+            )
+            val aiJson = aiDebugStore.toJson()
+            aiJson.keys().forEach { key -> put(key, aiJson.get(key)) }
+        }
+        Log.i("CalmWristDebug", "STATE:$state")
+    }
+
+    fun debugSetBand(bandName: String) {
+        val band = StressBand.entries.firstOrNull { it.name == bandName } ?: return
+        setDebugBand(band)
+    }
+
+    /** Dispara una generación de cápsula real contra Gemini con respuestas de prueba. */
+    fun debugRunCapsuleTest(answers: List<String>) {
