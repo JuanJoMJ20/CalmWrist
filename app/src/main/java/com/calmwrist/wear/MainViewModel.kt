@@ -184,3 +184,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: Exception) {
                 Log.e("CalmWrist", "Fallo al generar la carta mensual con Gemini", e)
                 _letterText.value = null
+                aiDebugStore.recordLetter(episodes.size, text = null, error = e.message ?: e.toString())
+            } finally {
+                _isGeneratingLetter.value = false
+            }
+        }
+    }
+
+    fun closeMonthlyLetter() {
+        _showMonthlyLetter.value = false
+        _letterText.value = null
+    }
+
+    fun openHistory() {
+        _episodes.value = episodeHistoryStore.load()
+        _showHistory.value = true
+    }
+
+    fun closeHistory() {
+        _showHistory.value = false
+    }
+
+    // ---- Panel de control de demo (solo build debug, ver DebugCommandReceiver) ----
+
+    /** Vuelca el estado completo a logcat (tag CalmWristDebug) para que el panel lo lea. */
+    fun debugDumpState() {
+        val state = JSONObject().apply {
