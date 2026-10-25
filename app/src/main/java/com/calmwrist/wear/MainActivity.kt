@@ -27,3 +27,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.wear.compose.material.Text
+import com.calmwrist.wear.copy.ErrorPresets
+import com.calmwrist.wear.model.StressBand
+import com.calmwrist.wear.theme.CalmWristColors
+import com.calmwrist.wear.theme.CalmWristTheme
+import com.calmwrist.wear.ui.HistoryScreen
+import com.calmwrist.wear.ui.HumanizedErrorScreen
+import com.calmwrist.wear.ui.InterventionScreen
+import com.calmwrist.wear.ui.MonthlyLetterScreen
+import com.calmwrist.wear.ui.OnboardingScreen
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            CalmWristTheme {
+                CalmWristApp()
+            }
+        }
+    }
+}
+
+@Composable
+private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
+    var permissionDenied by remember { mutableStateOf(false) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { granted ->
