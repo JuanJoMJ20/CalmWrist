@@ -157,3 +157,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val durationSeconds = (System.currentTimeMillis() - startedAt) / 1000
             episodeHistoryStore.append(EpisodeRecord(timestampMillis = startedAt, durationSeconds = durationSeconds))
             _hasEpisodeHistory.value = true
+            _episodes.value = episodeHistoryStore.load()
+            crisisStartedAtMillis = null
+        }
+        _band.value = StressBand.CALM
+
+        // Un refuerzo positivo fijo, visible unos segundos, antes de caer
+        // al mensaje genérico de calma de siempre — ver postCrisisAffirmation.
+        _justResolvedAffirmation.value = true
+        viewModelScope.launch {
+            delay(6_000)
+            _justResolvedAffirmation.value = false
+        }
+    }
+
+    fun openMonthlyLetter() {
+        _showMonthlyLetter.value = true
+        viewModelScope.launch {
+            _isGeneratingLetter.value = true
+            val episodes = episodeHistoryStore.load()
+            try {
+                val letter = GeminiReflectionService.generateLetter(episodes)
+                _letterText.value = letter
+                episodeHistoryStore.markLetterGenerated()
+                aiDebugStore.recordLetter(episodes.size, letter, error = null)
+            } catch (e: Exception) {
+                Log.e("CalmWrist", "Fallo al generar la carta mensual con Gemini", e)
+                _letterText.value = null
