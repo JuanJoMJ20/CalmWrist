@@ -164,3 +164,36 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         // Un refuerzo positivo fijo, visible unos segundos, antes de caer
         // al mensaje genérico de calma de siempre — ver postCrisisAffirmation.
+        _justResolvedAffirmation.value = true
+        viewModelScope.launch {
+            delay(6_000)
+            _justResolvedAffirmation.value = false
+        }
+    }
+
+    fun openMonthlyLetter() {
+        _showMonthlyLetter.value = true
+        viewModelScope.launch {
+            _isGeneratingLetter.value = true
+            val episodes = episodeHistoryStore.load()
+            try {
+                val letter = GeminiReflectionService.generateLetter(episodes)
+                _letterText.value = letter
+                episodeHistoryStore.markLetterGenerated()
+                aiDebugStore.recordLetter(episodes.size, letter, error = null)
+            } catch (e: Exception) {
+                Log.e("CalmWrist", "Fallo al generar la carta mensual con Gemini", e)
+                _letterText.value = null
+                aiDebugStore.recordLetter(episodes.size, text = null, error = e.message ?: e.toString())
+            } finally {
+                _isGeneratingLetter.value = false
+            }
+        }
+    }
+
+    fun closeMonthlyLetter() {
+        _showMonthlyLetter.value = false
+        _letterText.value = null
+    }
+
+    fun openHistory() {
