@@ -57,3 +57,33 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { granted ->
+        if (granted) {
+            permissionDenied = false
+            viewModel.start()
+        } else {
+            permissionDenied = true
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.BODY_SENSORS)
+    }
+
+    // En crisis no hay interacción táctil esperable (la persona está
+    // respirando, no tocando el reloj): sin esto, el timeout de pantalla
+    // de Wear OS apaga la pantalla o te devuelve a la carita del reloj
+    // justo en el peor momento. Se libera apenas la banda deja de ser
+    // CRISIS, para no gastar batería el resto del tiempo.
+    val band by viewModel.band.collectAsState()
+    val activity = LocalContext.current as? Activity
+    DisposableEffect(band, activity) {
+        val window = activity?.window
+        if (band == StressBand.CRISIS) {
+            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
