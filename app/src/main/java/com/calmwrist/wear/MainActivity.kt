@@ -74,3 +74,29 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
     // de Wear OS apaga la pantalla o te devuelve a la carita del reloj
     // justo en el peor momento. Se libera apenas la banda deja de ser
     // CRISIS, para no gastar batería el resto del tiempo.
+    val band by viewModel.band.collectAsState()
+    val activity = LocalContext.current as? Activity
+    DisposableEffect(band, activity) {
+        val window = activity?.window
+        if (band == StressBand.CRISIS) {
+            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    val error by viewModel.error.collectAsState()
+    val capsule by viewModel.capsule.collectAsState()
+    val onboardingPending by viewModel.onboardingPending.collectAsState()
+    val isGeneratingCapsule by viewModel.isGeneratingCapsule.collectAsState()
+    val capsuleGenerationFailed by viewModel.capsuleGenerationFailed.collectAsState()
+    val hasEpisodeHistory by viewModel.hasEpisodeHistory.collectAsState()
+    val showMonthlyLetter by viewModel.showMonthlyLetter.collectAsState()
+    val isGeneratingLetter by viewModel.isGeneratingLetter.collectAsState()
+    val letterText by viewModel.letterText.collectAsState()
+    val showHistory by viewModel.showHistory.collectAsState()
+    val episodes by viewModel.episodes.collectAsState()
+    val justResolvedAffirmation by viewModel.justResolvedAffirmation.collectAsState()
