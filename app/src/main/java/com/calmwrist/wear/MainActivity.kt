@@ -125,3 +125,29 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
             onComplete = { answers -> viewModel.generateCapsule(answers) },
             onSkip = { viewModel.dismissOnboarding() },
         )
+        showMonthlyLetter -> MonthlyLetterScreen(
+            isLoading = isGeneratingLetter,
+            letterText = letterText,
+            onClose = { viewModel.closeMonthlyLetter() },
+        )
+        showHistory -> HistoryScreen(
+            episodes = episodes,
+            onClose = { viewModel.closeHistory() },
+        )
+        else -> Box(modifier = Modifier.fillMaxSize()) {
+            // La pantalla real siempre ocupa el 100% del espacio, igual
+            // que en producción; los controles flotan encima sin reducir
+            // el área disponible para el diseño real.
+            InterventionScreen(
+                band = effectiveBand,
+                onResolved = { viewModel.resolveCrisis() },
+                capsule = capsule,
+                justResolvedAffirmation = justResolvedAffirmation,
+                modifier = Modifier.fillMaxSize(),
+            )
+            if (hasEpisodeHistory && effectiveBand == StressBand.CALM) {
+                // Padding generoso a propósito: pegado al borde de arriba
+                // (como estaba antes, a 6dp) el cristal curvo de una
+                // pantalla redonda corta el texto por los costados — acá
+                // abajo, a la altura del título, ya hay ancho de sobra.
+                Row(
