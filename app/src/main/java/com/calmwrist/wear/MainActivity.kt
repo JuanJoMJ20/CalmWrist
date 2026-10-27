@@ -100,3 +100,28 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
     val showHistory by viewModel.showHistory.collectAsState()
     val episodes by viewModel.episodes.collectAsState()
     val justResolvedAffirmation by viewModel.justResolvedAffirmation.collectAsState()
+    val currentError = error
+
+    // El pulso real no baja al instante apenas se resuelve una crisis — el
+    // sensor sigue mandando lecturas y el cuerpo tarda en asentarse, así
+    // que sin esto la banda real vuelve a ELEVATED casi al toque y el
+    // mensaje de "ya estás bien" nunca llega a mostrarse. Una crisis real
+    // nueva sigue ganando siempre: justResolvedAffirmation se apaga apenas
+    // el pulso vuelve a CRISIS (ver MainViewModel.setBand).
+    val effectiveBand = if (justResolvedAffirmation) StressBand.CALM else band
+
+    when {
+        permissionDenied -> HumanizedErrorScreen(
+            content = ErrorPresets.sensorPermissionDenied,
+            onAction = { permissionLauncher.launch(Manifest.permission.BODY_SENSORS) },
+        )
+        currentError != null -> HumanizedErrorScreen(
+            content = currentError,
+            onAction = { viewModel.dismissError() },
+        )
+        onboardingPending -> OnboardingScreen(
+            isGenerating = isGeneratingCapsule,
+            generationFailed = capsuleGenerationFailed,
+            onComplete = { answers -> viewModel.generateCapsule(answers) },
+            onSkip = { viewModel.dismissOnboarding() },
+        )
