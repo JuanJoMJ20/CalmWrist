@@ -48,3 +48,28 @@ async function fetchState() {
   const bcast = await broadcast('DUMP_STATE');
   if (!bcast.ok) return { ok: false, error: bcast.stderr || 'No se pudo contactar el reloj (adb broadcast falló).' };
   await sleep(600);
+  const logs = await runAdb(['logcat', '-d', '-s', 'CalmWristDebug:I']);
+  const lines = logs.stdout.split(/\r?\n/).filter((l) => l.includes('STATE:'));
+  if (lines.length === 0) {
+    return { ok: false, error: 'El reloj no respondió (¿la app está abierta? ¿sigue conectado el adb?).' };
+  }
+  const last = lines[lines.length - 1];
+  const jsonText = last.slice(last.indexOf('STATE:') + 'STATE:'.length);
+  try {
+    return { ok: true, state: JSON.parse(jsonText) };
+  } catch (e) {
+    return { ok: false, error: 'Respuesta del reloj no se pudo interpretar: ' + e.message };
+  }
+}
+
+async function deviceStatus() {
+  const result = await runAdb(['devices']);
+  if (!result.ok) return { connected: false, serial: null };
+  const line = result.stdout
+    .split(/\r?\n/)
+    .slice(1)
+    .map((l) => l.trim())
+    .find((l) => l.endsWith('\tdevice') || l.endsWith(' device'));
+  if (!line) return { connected: false, serial: null };
+  const serial = line.split(/\s+/)[0];
+  return { connected: true, serial };
