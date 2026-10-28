@@ -56,3 +56,32 @@ async function fetchState() {
   const last = lines[lines.length - 1];
   const jsonText = last.slice(last.indexOf('STATE:') + 'STATE:'.length);
   try {
+    return { ok: true, state: JSON.parse(jsonText) };
+  } catch (e) {
+    return { ok: false, error: 'Respuesta del reloj no se pudo interpretar: ' + e.message };
+  }
+}
+
+async function deviceStatus() {
+  const result = await runAdb(['devices']);
+  if (!result.ok) return { connected: false, serial: null };
+  const line = result.stdout
+    .split(/\r?\n/)
+    .slice(1)
+    .map((l) => l.trim())
+    .find((l) => l.endsWith('\tdevice') || l.endsWith(' device'));
+  if (!line) return { connected: false, serial: null };
+  const serial = line.split(/\s+/)[0];
+  return { connected: true, serial };
+}
+
+const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
+
+function serveStatic(req, res) {
+  let filePath = req.url === '/' ? '/index.html' : req.url;
+  filePath = path.join(PUBLIC_DIR, filePath);
+  if (!filePath.startsWith(PUBLIC_DIR)) {
+    res.writeHead(403);
+    res.end();
+    return;
+  }
