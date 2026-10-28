@@ -151,3 +151,29 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
                 // pantalla redonda corta el texto por los costados — acá
                 // abajo, a la altura del título, ya hay ancho de sobra.
                 Row(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 26.dp),
+                ) {
+                    Text(
+                        text = "Carta",
+                        color = CalmWristColors.accentFor(StressBand.CALM).copy(alpha = 0.6f),
+                        fontSize = 10.sp,
+                        modifier = Modifier.clickable { viewModel.openMonthlyLetter() },
+                    )
+                    Text(
+                        text = "  ·  ",
+                        color = CalmWristColors.textSecondary.copy(alpha = 0.4f),
+                        fontSize = 10.sp,
+                    )
+                    Text(
+                        text = "Historial",
+                        color = CalmWristColors.accentFor(StressBand.CALM).copy(alpha = 0.6f),
+                        fontSize = 10.sp,
+                        modifier = Modifier.clickable { viewModel.openHistory() },
+                    )
+                }
+            }
+        }
+    }
+}
