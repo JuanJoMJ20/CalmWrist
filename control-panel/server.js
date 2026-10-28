@@ -73,3 +73,28 @@ async function deviceStatus() {
   if (!line) return { connected: false, serial: null };
   const serial = line.split(/\s+/)[0];
   return { connected: true, serial };
+}
+
+const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
+
+function serveStatic(req, res) {
+  let filePath = req.url === '/' ? '/index.html' : req.url;
+  filePath = path.join(PUBLIC_DIR, filePath);
+  if (!filePath.startsWith(PUBLIC_DIR)) {
+    res.writeHead(403);
+    res.end();
+    return;
+  }
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('No encontrado');
+      return;
+    }
+    const ext = path.extname(filePath);
+    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    res.end(data);
+  });
+}
+
+function readBody(req) {
