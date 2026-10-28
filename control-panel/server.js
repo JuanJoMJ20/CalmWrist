@@ -23,3 +23,28 @@ function findAdb() {
 
 const ADB = findAdb();
 
+function runAdb(args) {
+  return new Promise((resolve) => {
+    execFile(ADB, args, { timeout: 10000 }, (error, stdout, stderr) => {
+      resolve({ ok: !error, stdout: stdout || '', stderr: stderr || (error ? error.message : '') });
+    });
+  });
+}
+
+async function broadcast(action, extras = {}) {
+  const args = ['shell', 'am', 'broadcast', '-a', `${PACKAGE}.debug.${action}`, '-p', PACKAGE];
+  for (const [key, value] of Object.entries(extras)) {
+    args.push('--es', key, String(value));
+  }
+  return runAdb(args);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchState() {
+  await runAdb(['logcat', '-c']);
+  const bcast = await broadcast('DUMP_STATE');
+  if (!bcast.ok) return { ok: false, error: bcast.stderr || 'No se pudo contactar el reloj (adb broadcast falló).' };
+  await sleep(600);
