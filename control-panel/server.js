@@ -123,3 +123,28 @@ const server = http.createServer(async (req, res) => {
 
   try {
     if (url === '/api/status' && req.method === 'GET') {
+      return sendJson(res, await deviceStatus());
+    }
+
+    if (url === '/api/connect' && req.method === 'POST') {
+      const { address } = await readBody(req);
+      const result = await runAdb(['connect', String(address || '')]);
+      return sendJson(res, { ok: result.ok, message: result.stdout.trim() || result.stderr.trim() });
+    }
+
+    if (url === '/api/state' && req.method === 'GET') {
+      return sendJson(res, await fetchState());
+    }
+
+    if (url === '/api/band' && req.method === 'POST') {
+      const { band } = await readBody(req);
+      if (!['CALM', 'ELEVATED', 'CRISIS'].includes(band)) return sendJson(res, { ok: false, error: 'banda inválida' }, 400);
+      const result = await broadcast('SET_BAND', { band });
+      return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
+    }
+
+    if (url === '/api/clear' && req.method === 'POST') {
+      const result = await broadcast('CLEAR_DATA');
+      return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
+    }
+
