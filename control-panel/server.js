@@ -27,3 +27,32 @@ function runAdb(args) {
   return new Promise((resolve) => {
     execFile(ADB, args, { timeout: 10000 }, (error, stdout, stderr) => {
       resolve({ ok: !error, stdout: stdout || '', stderr: stderr || (error ? error.message : '') });
+    });
+  });
+}
+
+async function broadcast(action, extras = {}) {
+  const args = ['shell', 'am', 'broadcast', '-a', `${PACKAGE}.debug.${action}`, '-p', PACKAGE];
+  for (const [key, value] of Object.entries(extras)) {
+    args.push('--es', key, String(value));
+  }
+  return runAdb(args);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchState() {
+  await runAdb(['logcat', '-c']);
+  const bcast = await broadcast('DUMP_STATE');
+  if (!bcast.ok) return { ok: false, error: bcast.stderr || 'No se pudo contactar el reloj (adb broadcast falló).' };
+  await sleep(600);
+  const logs = await runAdb(['logcat', '-d', '-s', 'CalmWristDebug:I']);
+  const lines = logs.stdout.split(/\r?\n/).filter((l) => l.includes('STATE:'));
+  if (lines.length === 0) {
+    return { ok: false, error: 'El reloj no respondió (¿la app está abierta? ¿sigue conectado el adb?).' };
+  }
+  const last = lines[lines.length - 1];
+  const jsonText = last.slice(last.indexOf('STATE:') + 'STATE:'.length);
+  try {
