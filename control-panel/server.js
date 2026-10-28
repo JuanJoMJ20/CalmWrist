@@ -98,3 +98,28 @@ function serveStatic(req, res) {
 }
 
 function readBody(req) {
+  return new Promise((resolve) => {
+    let data = '';
+    req.on('data', (chunk) => (data += chunk));
+    req.on('end', () => {
+      try {
+        resolve(data ? JSON.parse(data) : {});
+      } catch (e) {
+        resolve({});
+      }
+    });
+  });
+}
+
+function sendJson(res, obj, status = 200) {
+  res.writeHead(status, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(obj));
+}
+
+const server = http.createServer(async (req, res) => {
+  const url = req.url.split('?')[0];
+
+  if (!url.startsWith('/api/')) return serveStatic(req, res);
+
+  try {
+    if (url === '/api/status' && req.method === 'GET') {
