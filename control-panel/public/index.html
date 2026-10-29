@@ -105,3 +105,56 @@
     border: none;
     border-radius: 999px;
     padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid #262c31;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .chip:hover { transform: translateY(-1px); }
+  .chip:active { transform: translateY(0); }
+  .chip:disabled { opacity: 0.55; cursor: wait; transform: none; }
+
+  .chip.calm { color: var(--calm); }
+  .chip.elevated { color: var(--elevated); }
+  .chip.crisis { color: var(--crisis); }
+  .chip.danger { color: var(--danger); }
+
+  .chip.active.calm { border-color: var(--calm); box-shadow: 0 0 14px -4px var(--calm); background: #0f2622; }
+  .chip.active.elevated { border-color: var(--elevated); box-shadow: 0 0 14px -4px var(--elevated); background: #2a230c; }
+  .chip.active.crisis { border-color: var(--crisis); box-shadow: 0 0 14px -4px var(--crisis); background: #2a1d08; }
+
+  .chip.primary { background: var(--surface); }
+  .chip.ghost { background: transparent; border: 1px solid #262c31; color: var(--text-secondary); font-weight: 500; }
+
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row + .row { margin-top: 10px; }
+
+  .ai-block { font-size: 13px; line-height: 1.5; margin-top: 4px; }
+  .ai-block .label { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 10px; }
+  .ai-block .value { color: var(--text-primary); }
+  .ai-block .err { color: var(--danger); }
+  .ai-block .ts { color: var(--text-secondary); font-size: 11px; margin-top: 2px; }
+  .empty { color: var(--text-secondary); font-size: 13px; font-style: italic; }
+
+  /* Señales de carga: todo proceso async (conectar, cambiar banda, llamar
+     a Gemini) tiene que avisar que está en curso — nunca dejar al usuario
+     sin feedback mientras espera una respuesta de red. */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    opacity: 0.85;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
