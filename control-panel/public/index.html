@@ -212,3 +212,56 @@
     <h1>CalmWrist <span>— panel de control</span></h1>
     <div class="status"><span class="dot" id="dot"></span><span id="status-text">conectando…</span></div>
   </header>
+
+  <div class="connect-row">
+    <input id="address" type="text" placeholder="IP:puerto del reloj (ej. 192.168.40.20:43535)" />
+    <button class="chip primary" id="btn-connect">Conectar</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Ritmo / estado simulado</h2>
+      <div class="band-row">
+        <button class="chip calm" data-band="CALM">Calma</button>
+        <button class="chip elevated" data-band="ELEVATED">Elevado</button>
+        <button class="chip crisis" data-band="CRISIS">Crisis</button>
+      </div>
+      <div class="row">
+        <button class="chip ghost" id="btn-sim-crisis">Simular crisis (10s y vuelve a calma)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Episodios registrados</h2>
+      <div id="episode-count" class="ai-block value">—</div>
+      <div class="episodes-list" id="episode-list"></div>
+    </div>
+
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Qué recibió e hizo la IA</h2>
+      <div class="row">
+        <button class="chip primary" id="btn-refresh-ai">Actualizar</button>
+        <button class="chip primary" id="btn-test-capsule">Probar cápsula (voz de prueba)</button>
+        <button class="chip primary" id="btn-test-letter">Probar carta mensual</button>
+      </div>
+      <div id="ai-capsule" class="ai-block"><div class="empty">Sin datos aún — tocá "Actualizar".</div></div>
+      <div id="ai-letter" class="ai-block"></div>
+    </div>
+
+    <div class="card danger-card" style="grid-column: 1 / -1;">
+      <h2 style="color: var(--danger);">Borrar datos</h2>
+      <p>Borra la cápsula personalizada, el historial de episodios y el registro de IA del reloj. La app vuelve a pedir el onboarding por voz.</p>
+      <button class="chip danger" id="btn-clear">Borrar todos los datos</button>
+    </div>
+  </div>
+
+  <div id="log"></div>
+</div>
+
+<dialog id="confirm-dialog">
+  <h2 style="margin-top:0; font-size:15px;">¿Borrar todos los datos?</h2>
+  <p>Esto borra la cápsula, el historial de episodios y los registros de IA guardados en el reloj. No se puede deshacer.</p>
+  <div class="row">
+    <button class="chip ghost" id="btn-cancel-clear">Cancelar</button>
+    <button class="chip danger" id="btn-confirm-clear">Sí, borrar</button>
+  </div>
