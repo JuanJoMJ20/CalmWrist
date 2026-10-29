@@ -64,3 +64,70 @@
     border-radius: 999px;
     padding: 6px 14px;
   }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); transition: background 0.3s; }
+  .dot.on { background: var(--calm); box-shadow: 0 0 8px var(--calm); }
+
+  .connect-row { display: flex; gap: 8px; margin-bottom: 28px; }
+  .connect-row input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid #22282d;
+    color: var(--text-primary);
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 13px;
+    outline: none;
+  }
+  .connect-row input::placeholder { color: var(--text-secondary); }
+  .connect-row input:focus { border-color: var(--calm); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+
+  .card {
+    background: linear-gradient(165deg, var(--surface-glow), var(--surface));
+    border: 1px solid #20262b;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .card h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-secondary);
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+
+  .band-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .chip {
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 11px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid #262c31;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .chip:hover { transform: translateY(-1px); }
+  .chip:active { transform: translateY(0); }
+  .chip:disabled { opacity: 0.55; cursor: wait; transform: none; }
+
+  .chip.calm { color: var(--calm); }
+  .chip.elevated { color: var(--elevated); }
+  .chip.crisis { color: var(--crisis); }
+  .chip.danger { color: var(--danger); }
+
+  .chip.active.calm { border-color: var(--calm); box-shadow: 0 0 14px -4px var(--calm); background: #0f2622; }
+  .chip.active.elevated { border-color: var(--elevated); box-shadow: 0 0 14px -4px var(--elevated); background: #2a230c; }
+  .chip.active.crisis { border-color: var(--crisis); box-shadow: 0 0 14px -4px var(--crisis); background: #2a1d08; }
+
