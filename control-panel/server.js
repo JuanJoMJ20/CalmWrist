@@ -148,3 +148,28 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
     }
 
+    if (url === '/api/test/capsule' && req.method === 'POST') {
+      const { q1, q2, q3 } = await readBody(req);
+      const extras = {};
+      if (q1) extras.q1 = q1;
+      if (q2) extras.q2 = q2;
+      if (q3) extras.q3 = q3;
+      const result = await broadcast('RUN_CAPSULE_TEST', extras);
+      return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
+    }
+
+    if (url === '/api/test/letter' && req.method === 'POST') {
+      const result = await broadcast('RUN_LETTER_TEST');
+      return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
+    }
+
+    sendJson(res, { ok: false, error: 'ruta no encontrada' }, 404);
+  } catch (e) {
+    sendJson(res, { ok: false, error: e.message }, 500);
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`CalmWrist control panel: http://localhost:${PORT}`);
+  console.log(`Usando adb en: ${ADB}`);
+});
