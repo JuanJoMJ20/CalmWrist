@@ -265,3 +265,70 @@
     <button class="chip ghost" id="btn-cancel-clear">Cancelar</button>
     <button class="chip danger" id="btn-confirm-clear">Sí, borrar</button>
   </div>
+</dialog>
+
+<script>
+const $ = (sel) => document.querySelector(sel);
+const logEl = $('#log');
+let lastState = null;
+
+const ICON_SPINNER = '<span class="spinner" aria-hidden="true"></span>';
+const ICON_CHECK = '<svg class="status-icon ok" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 18 20 6"></polyline></svg>';
+const ICON_WARN = '<svg class="status-icon err" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"></path><line x1="12" y1="9" x2="12" y2="13"></line><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"></circle></svg>';
+
+/** Reemplaza el contenido de un botón por un spinner + texto mientras
+ * corre una acción async, y lo deshabilita para evitar doble-tap. */
+async function withLoading(btn, loadingLabel, fn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = `${ICON_SPINNER}<span>${loadingLabel}</span>`;
+  btn.disabled = true;
+  try {
+    await fn();
+  } finally {
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+}
+
+/** Para chips chicos (banda): agrega un spinner sin perder la etiqueta. */
+async function withInlineSpinner(btn, fn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = `${ICON_SPINNER}${original}`;
+  btn.disabled = true;
+  try {
+    await fn();
+  } finally {
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+}
+
+function renderLoadingBlock(el, text) {
+  el.innerHTML = `<div class="loading-block">${ICON_SPINNER}<span>${text}</span></div>`;
+}
+
+/** Espera a que cambie el timestamp de lastCapsule/lastLetter (vía
+ * getStamp), consultando /api/state cada 1.5s hasta un máximo de 25s. */
+async function pollUntilChange(getStamp, previousAt, timeoutMs = 25000, intervalMs = 1500) {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    const res = await api('/api/state');
+    if (res.ok) {
+      const at = getStamp(res.state);
+      if (at && at !== previousAt) return res.state;
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  return null;
+}
+
+function log(message, ok = true) {
+  const line = document.createElement('div');
+  line.className = ok ? 'ok' : 'fail';
+  const time = new Date().toLocaleTimeString();
+  line.textContent = `[${time}] ${message}`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+async function api(path, options) {
