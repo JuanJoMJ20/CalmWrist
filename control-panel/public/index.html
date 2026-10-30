@@ -332,3 +332,70 @@ function log(message, ok = true) {
 }
 
 async function api(path, options) {
+  const res = await fetch(path, options);
+  return res.json();
+}
+
+async function refreshStatus() {
+  try {
+    const status = await api('/api/status');
+    $('#dot').classList.toggle('on', status.connected);
+    $('#status-text').textContent = status.connected ? `reloj conectado (${status.serial})` : 'reloj no conectado';
+  } catch (e) {
+    $('#dot').classList.remove('on');
+    $('#status-text').textContent = 'servidor no responde';
+  }
+}
+
+function fmtTime(ms) {
+  if (!ms) return '';
+  return new Date(ms).toLocaleString();
+}
+
+function renderAi(state) {
+  const capsuleEl = $('#ai-capsule');
+  const letterEl = $('#ai-letter');
+
+  if (state.lastCapsule) {
+    const c = state.lastCapsule;
+    capsuleEl.innerHTML = `
+      <div class="label">Cápsula — respuestas enviadas</div>
+      <div class="value">${c.answers.map(a => '· ' + a).join('<br>')}</div>
+      ${c.error
+        ? `<div class="label">${ICON_WARN} Error</div><div class="err">${c.error}</div>`
+        : `<div class="label">${ICON_CHECK} Generado por Gemini</div><div class="value">"${c.title}" — ${c.subtitle}</div>`}
+      <div class="ts">${fmtTime(c.at)}</div>
+    `;
+  } else {
+    capsuleEl.innerHTML = '<div class="empty">Todavía no se generó ninguna cápsula.</div>';
+  }
+
+  if (state.lastLetter) {
+    const l = state.lastLetter;
+    letterEl.innerHTML = `
+      <div class="label">${l.error ? ICON_WARN : ICON_CHECK} Carta mensual — ${l.episodeCount} episodio(s) analizados</div>
+      ${l.error
+        ? `<div class="err">${l.error}</div>`
+        : `<div class="value">${l.text}</div>`}
+      <div class="ts">${fmtTime(l.at)}</div>
+    `;
+  } else {
+    letterEl.innerHTML = '';
+  }
+}
+
+function renderEpisodes(state) {
+  $('#episode-count').textContent = `${state.episodeCount || 0} episodio(s)`;
+  const list = $('#episode-list');
+  list.innerHTML = '';
+  (state.episodes || []).slice().reverse().forEach((e) => {
+    const row = document.createElement('div');
+    row.innerHTML = `<span>${new Date(e.t).toLocaleString()}</span><span>${e.d}s</span>`;
+    list.appendChild(row);
+  });
+}
+
+function renderBand(state) {
+  document.querySelectorAll('.band-row .chip').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.band === state.band);
+  });
