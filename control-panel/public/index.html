@@ -426,3 +426,56 @@ $('#btn-connect').addEventListener('click', async () => {
 document.querySelectorAll('.band-row .chip').forEach((btn) => {
   btn.addEventListener('click', async () => {
     const band = btn.dataset.band;
+    const siblings = document.querySelectorAll('.band-row .chip');
+    siblings.forEach((b) => { if (b !== btn) b.disabled = true; });
+    await withInlineSpinner(btn, async () => {
+      const res = await api('/api/band', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ band }) });
+      log(res.ok ? `banda → ${band}` : 'error al cambiar banda: ' + res.error, res.ok);
+      await refreshState(true);
+    });
+    siblings.forEach((b) => { b.disabled = false; });
+  });
+});
+
+$('#btn-sim-crisis').addEventListener('click', async () => {
+  const btn = $('#btn-sim-crisis');
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  await api('/api/band', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ band: 'CRISIS' }) });
+  log('simulando crisis — vuelve a calma en 10s');
+  renderBand({ band: 'CRISIS' });
+  let remaining = 10;
+  const label = () => `${ICON_SPINNER}<span>Resolviendo en ${remaining}s…</span>`;
+  btn.innerHTML = label();
+  const interval = setInterval(() => {
+    remaining -= 1;
+    if (remaining > 0) btn.innerHTML = label();
+  }, 1000);
+  setTimeout(async () => {
+    clearInterval(interval);
+    await api('/api/band', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ band: 'CALM' }) });
+    log('crisis resuelta → calma');
+    btn.innerHTML = original;
+    btn.disabled = false;
+    refreshState(true);
+  }, 10000);
+});
+
+$('#btn-refresh-ai').addEventListener('click', async () => {
+  await withLoading($('#btn-refresh-ai'), 'Actualizando…', () => refreshState(false));
+});
+
+$('#btn-test-capsule').addEventListener('click', async () => {
+  const beforeAt = lastState?.lastCapsule?.at ?? null;
+  renderLoadingBlock($('#ai-capsule'), 'Gemini está generando tu cápsula de prueba…');
+  await withLoading($('#btn-test-capsule'), 'Generando…', async () => {
+    const res = await api('/api/test/capsule', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    if (!res.ok) {
+      log('error: ' + res.error, false);
+      $('#ai-capsule').innerHTML = `<div class="empty">${ICON_WARN} No se pudo iniciar la prueba.</div>`;
+      return;
+    }
+    log('pidiendo cápsula de prueba a Gemini…');
+    const state = await pollUntilChange((s) => s.lastCapsule?.at, beforeAt);
+    if (state) {
+      lastState = state;
