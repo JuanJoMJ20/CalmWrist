@@ -466,3 +466,70 @@ $('#btn-refresh-ai').addEventListener('click', async () => {
 });
 
 $('#btn-test-capsule').addEventListener('click', async () => {
+  const beforeAt = lastState?.lastCapsule?.at ?? null;
+  renderLoadingBlock($('#ai-capsule'), 'Gemini está generando tu cápsula de prueba…');
+  await withLoading($('#btn-test-capsule'), 'Generando…', async () => {
+    const res = await api('/api/test/capsule', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    if (!res.ok) {
+      log('error: ' + res.error, false);
+      $('#ai-capsule').innerHTML = `<div class="empty">${ICON_WARN} No se pudo iniciar la prueba.</div>`;
+      return;
+    }
+    log('pidiendo cápsula de prueba a Gemini…');
+    const state = await pollUntilChange((s) => s.lastCapsule?.at, beforeAt);
+    if (state) {
+      lastState = state;
+      renderAi(state);
+      renderEpisodes(state);
+      renderBand(state);
+      log('cápsula de prueba lista', true);
+    } else {
+      log('Gemini no respondió a tiempo', false);
+      $('#ai-capsule').innerHTML = `<div class="empty">${ICON_WARN} No se recibió respuesta a tiempo. Probá de nuevo.</div>`;
+    }
+  });
+});
+
+$('#btn-test-letter').addEventListener('click', async () => {
+  const beforeAt = lastState?.lastLetter?.at ?? null;
+  renderLoadingBlock($('#ai-letter'), 'Gemini está generando la carta mensual…');
+  await withLoading($('#btn-test-letter'), 'Generando…', async () => {
+    const res = await api('/api/test/letter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    if (!res.ok) {
+      log('error: ' + res.error, false);
+      $('#ai-letter').innerHTML = `<div class="empty">${ICON_WARN} No se pudo iniciar la prueba.</div>`;
+      return;
+    }
+    log('pidiendo carta mensual a Gemini…');
+    const state = await pollUntilChange((s) => s.lastLetter?.at, beforeAt);
+    if (state) {
+      lastState = state;
+      renderAi(state);
+      renderEpisodes(state);
+      renderBand(state);
+      log('carta mensual lista', true);
+    } else {
+      log('Gemini no respondió a tiempo', false);
+      $('#ai-letter').innerHTML = `<div class="empty">${ICON_WARN} No se recibió respuesta a tiempo. Probá de nuevo.</div>`;
+    }
+  });
+});
+
+const dialog = $('#confirm-dialog');
+$('#btn-clear').addEventListener('click', () => dialog.showModal());
+$('#btn-cancel-clear').addEventListener('click', () => dialog.close());
+$('#btn-confirm-clear').addEventListener('click', async () => {
+  dialog.close();
+  await withLoading($('#btn-clear'), 'Borrando…', async () => {
+    const res = await api('/api/clear', { method: 'POST' });
+    log(res.ok ? 'datos borrados — la app vuelve a pedir onboarding' : 'error: ' + res.error, res.ok);
+    await refreshState(true);
+  });
+});
+
+refreshStatus();
+refreshState(true);
+setInterval(refreshStatus, 5000);
+</script>
+</body>
+</html>
