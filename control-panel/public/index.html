@@ -372,3 +372,57 @@ function renderAi(state) {
 
   if (state.lastLetter) {
     const l = state.lastLetter;
+    letterEl.innerHTML = `
+      <div class="label">${l.error ? ICON_WARN : ICON_CHECK} Carta mensual — ${l.episodeCount} episodio(s) analizados</div>
+      ${l.error
+        ? `<div class="err">${l.error}</div>`
+        : `<div class="value">${l.text}</div>`}
+      <div class="ts">${fmtTime(l.at)}</div>
+    `;
+  } else {
+    letterEl.innerHTML = '';
+  }
+}
+
+function renderEpisodes(state) {
+  $('#episode-count').textContent = `${state.episodeCount || 0} episodio(s)`;
+  const list = $('#episode-list');
+  list.innerHTML = '';
+  (state.episodes || []).slice().reverse().forEach((e) => {
+    const row = document.createElement('div');
+    row.innerHTML = `<span>${new Date(e.t).toLocaleString()}</span><span>${e.d}s</span>`;
+    list.appendChild(row);
+  });
+}
+
+function renderBand(state) {
+  document.querySelectorAll('.band-row .chip').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.band === state.band);
+  });
+}
+
+async function refreshState(quiet) {
+  const res = await api('/api/state');
+  if (!res.ok) {
+    if (!quiet) log('No se pudo leer el estado: ' + res.error, false);
+    return;
+  }
+  lastState = res.state;
+  renderAi(res.state);
+  renderEpisodes(res.state);
+  renderBand(res.state);
+}
+
+$('#btn-connect').addEventListener('click', async () => {
+  const address = $('#address').value.trim();
+  if (!address) return;
+  await withLoading($('#btn-connect'), 'Conectando…', async () => {
+    const res = await api('/api/connect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ address }) });
+    log(res.message || (res.ok ? 'conectado' : 'falló la conexión'), res.ok);
+    await refreshStatus();
+  });
+});
+
+document.querySelectorAll('.band-row .chip').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const band = btn.dataset.band;
