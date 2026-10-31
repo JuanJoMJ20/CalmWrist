@@ -18,3 +18,13 @@
 - **Carta mensual reflexiva e historial (`GeminiReflectionService` y `HistoryScreen`)**:
   - Registro local de episodios resueltos (`EpisodeHistoryStore`), cálculo de tendencia (`IMPROVING`, `STABLE`, `WORSENING`) y distribución por franja horaria (`Madrugada`, `Mañana`, `Tarde`, `Noche`).
   - Generación de una carta mensual cálida en segunda persona a partir de métricas agregadas (sin enviar datos biométricos crudos).
+- **Errores humanizados (`HumanizedErrorScreen`)**:
+  - Todo aviso del sistema explica obligatoriamente **qué pasó**, **por qué** y **qué hacer ahora** (sensor suelto, batería baja, modo silencio, permisos).
+
+---
+
+## Configuración y ejecución
+
+1. Crea un archivo `local.properties` en la raíz del proyecto con la ruta de tu SDK de Android y tu clave de Gemini:
+   ```properties
+   sdk.dir=C\:\\Users\\TU_USUARIO\\AppData\\Local\\Android\\Sdk
