@@ -25,3 +25,17 @@
 
 ## Configuración y ejecución
 
+1. Crea un archivo `local.properties` en la raíz del proyecto con la ruta de tu SDK de Android y tu clave de Gemini:
+   ```properties
+   sdk.dir=C\:\\Users\\TU_USUARIO\\AppData\\Local\\Android\\Sdk
+   geminiApiKey=TU_API_KEY_DE_GEMINI
+   ```
+2. Compila e instala el APK de depuración en el reloj o emulador Wear OS:
+   ```bash
+   ./gradlew :app:installDebug
+   ```
+3. Para iniciar el **Panel de control web de demostración** (puerto `4545` vía ADB):
+   ```bash
+   node control-panel/server.js
+   ```
+   Abre `http://localhost:4545` en el navegador para simular bandas (`CALM`, `ELEVATED`, `CRISIS`), probar la generación de cápsulas y cartas mensuales en vivo, y consultar el estado del reloj.
