@@ -153,7 +153,7 @@ private fun CalmWristApp(viewModel: MainViewModel = viewModel()) {
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top = 26.dp),
+                        .padding(top = 20.dp),
                 ) {
                     Text(
                         text = "Carta",
