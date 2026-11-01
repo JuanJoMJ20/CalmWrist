@@ -108,7 +108,7 @@ fun OnboardingScreen(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "Preparando tu cápsula…",
+                    text = "Gemini está preparando tu cápsula…",
                     color = CalmWristColors.textSecondary,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center,
