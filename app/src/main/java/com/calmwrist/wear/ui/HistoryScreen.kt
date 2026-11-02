@@ -22,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.Text
@@ -41,6 +44,8 @@ import com.calmwrist.wear.theme.CalmWristColors
 fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
     val accent = CalmWristColors.accentFor(StressBand.CALM)
     val stats = computeEpisodeStats(episodes)
+    val scrollState = rememberScrollState()
+    val focusRequester = rememberActiveFocusRequester()
 
     Column(
         modifier = Modifier
