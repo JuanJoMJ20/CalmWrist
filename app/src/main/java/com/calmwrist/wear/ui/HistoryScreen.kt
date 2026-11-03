@@ -52,7 +52,13 @@ fun HistoryScreen(episodes: List<EpisodeRecord>, onClose: () -> Unit) {
             .fillMaxSize()
             .background(CalmWristColors.background)
             .padding(top = 26.dp, bottom = 26.dp, start = 24.dp, end = 24.dp)
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(scrollState)
+            // Permite bajar girando la corona/bisel, no solo con el dedo:
+            // el texto de historial puede ser más largo que la pantalla.
+            .rotaryScrollable(
+                behavior = RotaryScrollableDefaults.behavior(scrollState),
+                focusRequester = focusRequester,
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
