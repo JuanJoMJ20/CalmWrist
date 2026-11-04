@@ -18,6 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.CircularProgressIndicator
@@ -36,6 +39,9 @@ fun MonthlyLetterScreen(
     letterText: String?,
     onClose: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+    val focusRequester = rememberActiveFocusRequester()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
