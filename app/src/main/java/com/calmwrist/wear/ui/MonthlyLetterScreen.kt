@@ -51,9 +51,17 @@ fun MonthlyLetterScreen(
             // redonda y chica del reloj un texto de más de 2-3 oraciones
             // se corta sin esta línea, sin ninguna forma de bajar a leer
             // el resto.
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(scrollState)
+            // Girando la corona/bisel también baja, igual que en Historial.
+            .rotaryScrollable(
+                behavior = RotaryScrollableDefaults.behavior(scrollState),
+                focusRequester = focusRequester,
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        // Center + verticalScroll corta el contenido (ver mismo problema
+        // ya resuelto en HistoryScreen/OnboardingScreen): con scroll hay
+        // que usar Top, si no el texto largo de la carta queda incompleto.
+        verticalArrangement = Arrangement.Top,
     ) {
         if (isLoading) {
             CircularProgressIndicator(indicatorColor = CalmWristColors.accentFor(StressBand.CALM))
