@@ -67,7 +67,7 @@ fun MonthlyLetterScreen(
             CircularProgressIndicator(indicatorColor = CalmWristColors.accentFor(StressBand.CALM))
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Pensando en tu mes…",
+                text = "Gemini está pensando en tu mes…",
                 color = CalmWristColors.textSecondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center,
