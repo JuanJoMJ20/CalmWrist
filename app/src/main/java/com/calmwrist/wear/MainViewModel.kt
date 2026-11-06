@@ -245,6 +245,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         openMonthlyLetter()
     }
 
+    fun debugSimulateEpisodes(count: Int) {
+        val now = System.currentTimeMillis()
+        val dayMillis = 24L * 60 * 60 * 1000
+        val hoursOfDay = listOf(7, 11, 14, 17, 21, 2)
+        repeat(count) { i ->
+            val daysAgo = (count - i) * 2L
+            val hour = hoursOfDay[i % hoursOfDay.size]
+            val timestamp = now - daysAgo * dayMillis + hour * 60 * 60 * 1000
+            val baseDuration = (260L - i * 28L).coerceAtLeast(12L)
+            episodeHistoryStore.append(EpisodeRecord(timestampMillis = timestamp, durationSeconds = baseDuration))
+        }
+        _hasEpisodeHistory.value = true
+        _episodes.value = episodeHistoryStore.load()
+    }
+
     /** Reset total: cápsula, historial de episodios, estado de IA y la banda actual. */
     fun debugClearAll() {
         capsuleStore.clear()
