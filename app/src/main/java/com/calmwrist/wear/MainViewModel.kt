@@ -245,6 +245,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         openMonthlyLetter()
     }
 
+    /**
+     * Genera episodios de prueba con fechas, horas y duraciones variadas
+     * (en vez de uno solo repetido) para que Historial y la Carta mensual
+     * tengan material real con el que calcular tendencia y franja horaria
+     * — eso recién aparece con 4+ episodios (ver computeEpisodeStats).
+     */
     fun debugSimulateEpisodes(count: Int) {
         val now = System.currentTimeMillis()
         val dayMillis = 24L * 60 * 60 * 1000
@@ -253,8 +259,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val daysAgo = (count - i) * 2L
             val hour = hoursOfDay[i % hoursOfDay.size]
             val timestamp = now - daysAgo * dayMillis + hour * 60 * 60 * 1000
-            val baseDuration = (260L - i * 28L).coerceAtLeast(12L)
-            episodeHistoryStore.append(EpisodeRecord(timestampMillis = timestamp, durationSeconds = baseDuration))
+            // Duración decreciente con algo de ruido: cuenta una historia
+            // de mejora creíble en vez de una línea recta poco realista.
+            val baseDuration = 260L - i * 28L
+            val noise = (i * 37) % 40 - 20
+            val duration = (baseDuration + noise).coerceAtLeast(12L)
+            episodeHistoryStore.append(EpisodeRecord(timestampMillis = timestamp, durationSeconds = duration))
         }
         _hasEpisodeHistory.value = true
         _episodes.value = episodeHistoryStore.load()
