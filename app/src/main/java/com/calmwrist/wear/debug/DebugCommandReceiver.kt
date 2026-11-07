@@ -38,9 +38,11 @@ class DebugCommandReceiver : BroadcastReceiver() {
         const val ACTION_DUMP_STATE = "$PREFIX.DUMP_STATE"
         const val ACTION_RUN_CAPSULE_TEST = "$PREFIX.RUN_CAPSULE_TEST"
         const val ACTION_RUN_LETTER_TEST = "$PREFIX.RUN_LETTER_TEST"
+        const val ACTION_SIMULATE_EPISODES = "$PREFIX.SIMULATE_EPISODES"
         const val EXTRA_BAND = "band"
         const val EXTRA_Q1 = "q1"
         const val EXTRA_Q2 = "q2"
         const val EXTRA_Q3 = "q3"
+        const val EXTRA_COUNT = "count"
     }
 }
