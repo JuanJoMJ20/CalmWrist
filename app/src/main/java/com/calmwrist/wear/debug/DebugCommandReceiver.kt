@@ -28,6 +28,10 @@ class DebugCommandReceiver : BroadcastReceiver() {
                 vm.debugRunCapsuleTest(answers)
             }
             ACTION_RUN_LETTER_TEST -> vm.debugRunLetterTest()
+            ACTION_SIMULATE_EPISODES -> {
+                val count = intent.getStringExtra(EXTRA_COUNT)?.toIntOrNull() ?: 6
+                vm.debugSimulateEpisodes(count)
+            }
         }
     }
 
