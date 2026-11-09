@@ -42,6 +42,7 @@
                 <action android:name="com.calmwrist.wear.debug.DUMP_STATE" />
                 <action android:name="com.calmwrist.wear.debug.RUN_CAPSULE_TEST" />
                 <action android:name="com.calmwrist.wear.debug.RUN_LETTER_TEST" />
+                <action android:name="com.calmwrist.wear.debug.SIMULATE_EPISODES" />
             </intent-filter>
         </receiver>
     </application>
