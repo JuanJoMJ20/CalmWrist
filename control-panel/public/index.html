@@ -235,6 +235,9 @@
       <h2>Episodios registrados</h2>
       <div id="episode-count" class="ai-block value">—</div>
       <div class="episodes-list" id="episode-list"></div>
+      <div class="row" style="margin-top: 10px;">
+        <button class="chip ghost" id="btn-sim-episodes">Simular 6 episodios (para ver tendencia)</button>
+      </div>
     </div>
 
     <div class="card" style="grid-column: 1 / -1;">
@@ -459,6 +462,18 @@ $('#btn-sim-crisis').addEventListener('click', async () => {
     btn.disabled = false;
     refreshState(true);
   }, 10000);
+});
+
+$('#btn-sim-episodes').addEventListener('click', async () => {
+  await withLoading($('#btn-sim-episodes'), 'Generando…', async () => {
+    const res = await api('/api/simulate-episodes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ count: 6 }) });
+    if (!res.ok) {
+      log('error al simular episodios: ' + res.error, false);
+      return;
+    }
+    log('6 episodios de prueba agregados al historial', true);
+    await refreshState(true);
+  });
 });
 
 $('#btn-refresh-ai').addEventListener('click', async () => {
