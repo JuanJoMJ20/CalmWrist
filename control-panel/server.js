@@ -163,6 +163,12 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
     }
 
+    if (url === '/api/simulate-episodes' && req.method === 'POST') {
+      const { count } = await readBody(req);
+      const result = await broadcast('SIMULATE_EPISODES', { count: count || 6 });
+      return sendJson(res, { ok: result.ok, error: result.ok ? undefined : result.stderr });
+    }
+
     sendJson(res, { ok: false, error: 'ruta no encontrada' }, 404);
   } catch (e) {
     sendJson(res, { ok: false, error: e.message }, 500);
